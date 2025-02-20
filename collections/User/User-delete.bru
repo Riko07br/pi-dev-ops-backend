@@ -1,0 +1,11 @@
+meta {
+  name: User-delete
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:8080/users/{{userId}}
+  body: none
+  auth: none
+}

@@ -1,0 +1,17 @@
+meta {
+  name: User-update
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:8080/users/{{userId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "updated-user@mail.com"
+  }
+}

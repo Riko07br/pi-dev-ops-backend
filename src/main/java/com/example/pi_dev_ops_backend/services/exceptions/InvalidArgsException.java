@@ -11,9 +11,4 @@ public class InvalidArgsException extends RuntimeException
     {
         super(message);
     }
-
-    public InvalidArgsException(Class entityClass, String message)
-    {
-        super("Invalid argument for " + entityClass.getSimpleName() + ". " + message);
-    }
 }
