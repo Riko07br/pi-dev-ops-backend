@@ -9,6 +9,7 @@ import com.example.pi_dev_ops_backend.repository.UserRepository;
 import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;
 import com.example.pi_dev_ops_backend.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,13 +26,13 @@ public class UserService
     public Page<UserResponseDTO> findAll(PaginationParams paginationParams)
     {
         Pageable pageable = PageRequest.of(paginationParams.getPage(), paginationParams.getSize());
-        return userRepository.findAll(pageable).map(UserMapper::toResponseDTO);
+        return userRepository.findAll(pageable).map(UserMapper.INSTANCE::toUserResponseDTO);
     }
 
     public UserResponseDTO findById(Long id)
     {
         User user = findEntityById(id);
-        return UserMapper.toResponseDTO(user);
+        return UserMapper.INSTANCE.toUserResponseDTO(user);
     }
 
     public UserResponseDTO create(UserRequestDTO userRequestDTO)
@@ -41,7 +42,7 @@ public class UserService
 
         User user = new User(userRequestDTO.email(), userRequestDTO.password());
 
-        return UserMapper.toResponseDTO(userRepository.save(user));
+        return UserMapper.INSTANCE.toUserResponseDTO(userRepository.save(user));
     }
 
     public UserResponseDTO update(Long id, UserRequestDTO userRequestDTO)
@@ -54,7 +55,7 @@ public class UserService
         user.setEmail(userRequestDTO.email());
         user.setPassword(userRequestDTO.password());
 
-        return UserMapper.toResponseDTO(userRepository.save(user));
+        return UserMapper.INSTANCE.toUserResponseDTO(userRepository.save(user));
     }
 
     public void delete(Long id)
@@ -65,7 +66,7 @@ public class UserService
     public UserResponseDTO findByEmail(String email)
     {
         User user = findEntityByEmail(email);
-        return UserMapper.toResponseDTO(user);
+        return UserMapper.INSTANCE.toUserResponseDTO(user);
     }
 
     public User findEntityByEmail(String email)

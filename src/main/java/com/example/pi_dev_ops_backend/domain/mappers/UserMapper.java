@@ -2,11 +2,15 @@ package com.example.pi_dev_ops_backend.domain.mappers;
 
 import com.example.pi_dev_ops_backend.domain.dtos.UserResponseDTO;
 import com.example.pi_dev_ops_backend.domain.entities.User;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-public class UserMapper
+@Mapper(componentModel = "spring")
+public interface UserMapper
 {
-    public static UserResponseDTO toResponseDTO(User user)
-    {
-        return new UserResponseDTO(user.getId(), user.getEmail(), 1L);
-    }
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+
+    @Mapping (source = "user.userProfile.id", target = "profileId")
+    UserResponseDTO toUserResponseDTO(User user);
 }
