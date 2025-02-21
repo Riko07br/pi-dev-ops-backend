@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,9 @@ public class User implements Serializable
     private Long id;
     private String email;
     private String password;
+
+    @OneToOne(mappedBy = "user", orphanRemoval = true)
+    private UserProfile userProfile;
 
     public User(Long id, String email, String password)
     {
