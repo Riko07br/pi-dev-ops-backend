@@ -7,6 +7,7 @@ import com.example.pi_dev_ops_backend.domain.entities.UserProfile;
 import com.example.pi_dev_ops_backend.domain.mappers.UserProfileMapper;
 import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
 import com.example.pi_dev_ops_backend.repository.UserProfileRepository;
+import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;
 import com.example.pi_dev_ops_backend.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,10 @@ public class UserProfileService
     public UserProfileResponseDTO create(Long userId, UserProfileRequestDTO userProfileRequestDTO)
     {
         User user = userService.findEntityById(userId);
+        if (user.getUserProfile() != null)
+        {
+            throw new InvalidArgsException("User already has a profile");
+        }
         UserProfile userProfile = UserProfileMapper.INSTANCE.toUserProfile(userProfileRequestDTO);
         userProfile.setUser(user);
         userProfile = userProfileRepository.save(userProfile);
@@ -55,6 +60,8 @@ public class UserProfileService
 
     public void delete(Long id)
     {
+        UserProfile userProfile = findEntityById(id);
+        userProfile.setUser(null);
         userProfileRepository.deleteById(id);
     }
 

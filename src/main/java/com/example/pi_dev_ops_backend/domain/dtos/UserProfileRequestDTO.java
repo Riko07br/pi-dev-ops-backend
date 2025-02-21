@@ -4,7 +4,8 @@ public record UserProfileRequestDTO(
         String name,
         String phone,
         String address,
-        String postalCode
+        String postalCode,
+        Long userId //FIXME temporary until auth is implemented
 )
 {
 }

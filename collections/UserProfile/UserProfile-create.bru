@@ -1,0 +1,25 @@
+meta {
+  name: UserProfile-create
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/user-profiles
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "User Created",
+    "phone": "123456789",
+    "address": "Street Nowhere",
+    "postalCode": "123456789",
+    "userId": {{userId}}
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("userProfileId", res.body.id)
+}
