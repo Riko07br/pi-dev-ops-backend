@@ -1,0 +1,20 @@
+meta {
+  name: Auth-login
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080/auth/login
+  body: none
+  auth: basic
+}
+
+auth:basic {
+  username: {{newUserEmail}}
+  password: {{newUserPassword}}
+}
+
+script:post-response {
+  bru.setEnvVar("token", res.getHeader("authorization"))
+}

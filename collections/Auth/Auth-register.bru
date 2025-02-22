@@ -1,0 +1,23 @@
+meta {
+  name: Auth-register
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "new-user@mail.com",
+    "password": "123456789"
+  }
+}
+
+script:pre-request {
+  bru.setEnvVar("newUserEmail", req.body.email);
+  bru.setEnvVar("newUserPassword", req.body.password);
+}
