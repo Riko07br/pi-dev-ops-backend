@@ -4,6 +4,7 @@ import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.entities.UserProfile;
 import com.example.pi_dev_ops_backend.repository.UserProfileRepository;
 import com.example.pi_dev_ops_backend.repository.UserRepository;
+import com.example.pi_dev_ops_backend.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -17,11 +18,13 @@ public class DevConfig implements CommandLineRunner
     private UserRepository userRepository;
     @Autowired
     private UserProfileRepository userProfileRepository;
+    @Autowired
+    private SecurityConfig securityConfiguration;
 
     @Override
     public void run(String... args) throws Exception
     {
-        String password = "123456";
+        String password = securityConfiguration.passwordEncoder().encode("123456");
 
         User u1 = userRepository.save(new User(null, "user1@mail.com", password));
         User u2 = userRepository.save(new User(null, "user2@mail.com", password));
