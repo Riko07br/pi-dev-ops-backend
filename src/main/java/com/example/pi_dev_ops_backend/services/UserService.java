@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class UserService
 {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Page<UserResponseDTO> findAll(PaginationParams paginationParams)
     {
@@ -40,7 +42,7 @@ public class UserService
         if (userRepository.findByEmail(userRequestDTO.email()).isPresent())
             throw new InvalidArgsException("Email already in use");
 
-        User user = new User(userRequestDTO.email(), userRequestDTO.password());
+        User user = new User(userRequestDTO.email(), passwordEncoder.encode(userRequestDTO.password()));
 
         return UserMapper.INSTANCE.toUserResponseDTO(userRepository.save(user));
     }
@@ -52,8 +54,8 @@ public class UserService
         if (userOptional.isPresent() && !user.equals(userOptional.get()))
             throw new InvalidArgsException("Email already in use");
 
-        user.setEmail(userRequestDTO.email());
-        user.setPassword(userRequestDTO.password());
+        user.setEmail(userRequestDTO.email() != null ? userRequestDTO.email() : user.getEmail());
+        user.setPassword(userRequestDTO.password() != null ? passwordEncoder.encode(userRequestDTO.password()) : user.getPassword());
 
         return UserMapper.INSTANCE.toUserResponseDTO(userRepository.save(user));
     }
