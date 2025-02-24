@@ -1,0 +1,52 @@
+
+name: Spring boot CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B clean package --file pom.xml
+      - name: Cache JAR file
+        uses: actions/cache@v3
+        with:
+          path: |
+            target/pi-dev-ops-backend*.jar
+          key: ${{ runner.os }}-jar-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-jar-
+  push_to_dockerhub:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Restore JAR file from cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            target/pi-dev-ops-backend*.jar
+          key: ${{ runner.os }}-jar-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-jar-
+      - name: Build Docker image
+        run: docker build -t riko07/pi-dev-ops-backend:latest .
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Push Docker image
+        run: docker push riko07/pi-dev-ops-backend:latest
