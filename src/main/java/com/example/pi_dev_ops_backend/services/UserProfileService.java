@@ -61,8 +61,8 @@ public class UserProfileService
     public void delete(Long id)
     {
         UserProfile userProfile = findEntityById(id);
-        userProfile.setUser(null);
-        userProfileRepository.deleteById(id);
+        userProfile.getUser().setUserProfile(null);
+        userProfileRepository.delete(userProfile);
     }
 
     UserProfile findEntityById(Long id)
