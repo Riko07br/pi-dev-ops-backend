@@ -1,0 +1,17 @@
+meta {
+  name: Skill-update
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:8080/skills/{{skillId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "updated skill"
+  }
+}

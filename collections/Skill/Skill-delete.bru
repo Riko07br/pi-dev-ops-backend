@@ -1,0 +1,11 @@
+meta {
+  name: Skill-delete
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:8080/skills/{{skillId}}
+  body: none
+  auth: none
+}

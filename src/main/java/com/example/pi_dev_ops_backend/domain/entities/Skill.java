@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -23,9 +22,9 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Table (name = "tb_user_profile")
-public class UserProfile implements Serializable
+@EqualsAndHashCode (onlyExplicitlyIncluded = true)
+@Table (name = "tb_skill")
+public class Skill implements Serializable
 {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -34,26 +33,13 @@ public class UserProfile implements Serializable
     @EqualsAndHashCode.Include
     private Long id;
     private String name;
-    private String phone;
-    private String address;
-    private String postalCode;
 
-    @OneToOne
-    private User user;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "skills", cascade = CascadeType.ALL)
     @Setter(AccessLevel.NONE)
-    private Set<Skill> skills = new HashSet<>();
+    private Set<UserProfile> userProfiles = new HashSet<>();
 
-    public UserProfile(String name, String phone, String address, String postalCode)
+    public Skill(String name)
     {
         this.name = name;
-        this.phone = phone;
-        this.address = address;
-        this.postalCode = postalCode;
-    }
-
-    public void addSkill(Skill skill)
-    {
-        this.skills.add(skill);
     }
 }

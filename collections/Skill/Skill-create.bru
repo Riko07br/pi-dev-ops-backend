@@ -1,0 +1,21 @@
+meta {
+  name: Skill-create
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/skills
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "New skill"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("skillId", res.body.id)
+}

@@ -7,18 +7,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode (onlyExplicitlyIncluded = true)
 @Table (name = "tb_user")
 public class User implements Serializable
 {
@@ -26,6 +27,7 @@ public class User implements Serializable
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
     private String email;
     private String password;
@@ -33,36 +35,9 @@ public class User implements Serializable
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserProfile userProfile;
 
-    public User(Long id, String email, String password)
-    {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-    }
-
     public User(String email, String password)
     {
         this.email = email;
         this.password = password;
-    }
-
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = Objects.hashCode(id);
-        result = 31 * result + Objects.hashCode(email);
-        return result;
     }
 }
