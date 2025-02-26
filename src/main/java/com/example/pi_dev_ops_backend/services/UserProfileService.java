@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,9 +35,9 @@ public class UserProfileService
         return UserProfileMapper.INSTANCE.toUserProfileResponseDTO(user);
     }
 
-    public UserProfileResponseDTO create(Long userId, UserProfileRequestDTO userProfileRequestDTO)
+    public UserProfileResponseDTO create(UserProfileRequestDTO userProfileRequestDTO, Authentication authentication)
     {
-        User user = userService.findEntityById(userId);
+        User user = userService.findEntityByEmail(authentication.getName());
         if (user.getUserProfile() != null)
         {
             throw new InvalidArgsException("User already has a profile");

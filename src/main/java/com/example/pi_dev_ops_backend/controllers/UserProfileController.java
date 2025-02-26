@@ -7,6 +7,7 @@ import com.example.pi_dev_ops_backend.services.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -41,9 +42,9 @@ public class UserProfileController
     }
 
     @PostMapping
-    public ResponseEntity<UserProfileResponseDTO> create(@RequestBody UserProfileRequestDTO userRequestDTO) throws URISyntaxException
+    public ResponseEntity<UserProfileResponseDTO> create(@RequestBody UserProfileRequestDTO userRequestDTO, Authentication authentication) throws URISyntaxException
     {
-        UserProfileResponseDTO responseDTO = userProfileService.create(userRequestDTO.userId(), userRequestDTO);
+        UserProfileResponseDTO responseDTO = userProfileService.create(userRequestDTO, authentication);
         return ResponseEntity.created(new URI("/user-profiles/" + responseDTO.id())).body(responseDTO);
     }
 
