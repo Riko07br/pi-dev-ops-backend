@@ -59,7 +59,6 @@ public class SkillService
     public void delete(Long id)
     {
         Skill skill = findEntityById(id);
-        skill.getUserProfiles().forEach(userProfile -> userProfile.getSkills().remove(skill));
         skillRepository.delete(skill);
     }
 
