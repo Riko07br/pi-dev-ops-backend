@@ -4,7 +4,7 @@ meta {
   seq: 4
 }
 
-patch {
+put {
   url: http://localhost:8080/user-profiles/{{userProfileId}}
   body: json
   auth: none
@@ -13,6 +13,12 @@ patch {
 body:json {
   {
     "name": "User Updated",
-    "postalCode": "999999999"
+    "phone": "123456789",
+    "address": "Street Nowhere",
+    "postalCode": "123456789",
+    "skills":[
+      "Teste 2",
+      "Laravel"
+    ]
   }
 }

@@ -7,11 +7,12 @@ import com.example.pi_dev_ops_backend.services.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,13 +42,13 @@ public class UserProfileController
     }
 
     @PostMapping
-    public ResponseEntity<UserProfileResponseDTO> create(@RequestBody UserProfileRequestDTO userRequestDTO) throws URISyntaxException
+    public ResponseEntity<UserProfileResponseDTO> create(@RequestBody UserProfileRequestDTO userRequestDTO, Authentication authentication) throws URISyntaxException
     {
-        UserProfileResponseDTO responseDTO = userProfileService.create(userRequestDTO.userId(), userRequestDTO);
+        UserProfileResponseDTO responseDTO = userProfileService.create(userRequestDTO, authentication);
         return ResponseEntity.created(new URI("/user-profiles/" + responseDTO.id())).body(responseDTO);
     }
 
-    @PatchMapping ("/{id}")
+    @PutMapping ("/{id}")
     public ResponseEntity<UserProfileResponseDTO> update(@PathVariable Long id, @RequestBody UserProfileRequestDTO requestDTO)
     {
         UserProfileResponseDTO responseDTO = userProfileService.update(id, requestDTO);
