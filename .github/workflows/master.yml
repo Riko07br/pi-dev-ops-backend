@@ -1,5 +1,4 @@
-
-name: Spring boot CI/CD
+name: Spring boot CI/CD - Master
 
 on:
   push:
