@@ -2,6 +2,7 @@ package com.example.pi_dev_ops_backend.services;
 
 import com.example.pi_dev_ops_backend.domain.dtos.UserProfileRequestDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.UserProfileResponseDTO;
+import com.example.pi_dev_ops_backend.domain.entities.Skill;
 import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.entities.UserProfile;
 import com.example.pi_dev_ops_backend.domain.mappers.UserProfileMapper;
@@ -22,6 +23,7 @@ public class UserProfileService
 {
     private final UserProfileRepository userProfileRepository;
     private final UserService userService;
+    private final SkillService skillService;
 
     public Page<UserProfileResponseDTO> findAll(PaginationParams paginationParams)
     {
@@ -42,20 +44,45 @@ public class UserProfileService
         {
             throw new InvalidArgsException("User already has a profile");
         }
-        UserProfile userProfile = UserProfileMapper.INSTANCE.toUserProfile(userProfileRequestDTO);
-        userProfile.setUser(user);
-        userProfile = userProfileRepository.save(userProfile);
+
+        UserProfile createdUserProfile = UserProfileMapper.INSTANCE.toUserProfile(userProfileRequestDTO);
+        createdUserProfile.setUser(user);
+
+        userProfileRequestDTO.skills().forEach(skillName -> {
+            try
+            {
+                Skill skill = skillService.findEntityByName(skillName);
+                createdUserProfile.addSkill(skill);
+            }
+            catch (ResourceNotFoundException e)
+            {
+                createdUserProfile.addSkill(new Skill(skillName));
+            }
+        });
+
+        UserProfile userProfile = userProfileRepository.save(createdUserProfile);
         return UserProfileMapper.INSTANCE.toUserProfileResponseDTO(userProfile);
     }
 
-    public UserProfileResponseDTO update(Long id, UserProfileRequestDTO userRequestDTO)
+    public UserProfileResponseDTO update(Long id, UserProfileRequestDTO userProfileRequestDTO)
     {
-        UserProfile userProfile = findEntityById(id);
-        userProfile.setName(userRequestDTO.name() != null ? userRequestDTO.name() : userProfile.getName());
-        userProfile.setPhone(userRequestDTO.phone() != null ? userRequestDTO.phone() : userProfile.getPhone());
-        userProfile.setAddress(userRequestDTO.address() != null ? userRequestDTO.address() : userProfile.getAddress());
-        userProfile.setPostalCode(userRequestDTO.postalCode() != null ? userRequestDTO.postalCode() : userProfile.getPostalCode());
-        userProfile = userProfileRepository.save(userProfile);
+        findEntityById(id);
+        UserProfile updatedUserProfile = UserProfileMapper.INSTANCE.toUserProfile(userProfileRequestDTO);
+        updatedUserProfile.setId(id);
+
+        userProfileRequestDTO.skills().forEach(skillName -> {
+            try
+            {
+                Skill skill = skillService.findEntityByName(skillName);
+                updatedUserProfile.addSkill(skill);
+            }
+            catch (ResourceNotFoundException e)
+            {
+                updatedUserProfile.addSkill(new Skill(skillName));
+            }
+        });
+
+        UserProfile userProfile = userProfileRepository.save(updatedUserProfile);
         return UserProfileMapper.INSTANCE.toUserProfileResponseDTO(userProfile);
     }
 

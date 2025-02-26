@@ -42,9 +42,9 @@ public class DevConfig implements CommandLineRunner
         UserProfile p2 = new UserProfile("User 4", "123456789", "Street 2", "12345");
         p2.setUser(u4);
         p2 = userProfileRepository.save(p2);
-        p2.addSkill(new Skill("Java3"));
+        p2.addSkill(new Skill("Java"));
         p2.addSkill(new Skill("Spring Boot"));
-        p2.addSkill(new Skill("Spring Boot2"));
+        p2.addSkill(new Skill("Laravel"));
         userProfileRepository.save(p2);
 
     }
