@@ -21,6 +21,8 @@ public class DevConfig implements CommandLineRunner
     @Autowired
     private UserProfileRepository userProfileRepository;
     @Autowired
+    private OpeningRepository openingRepository;
+    @Autowired
     private SecurityConfig securityConfiguration;
 
     @Override
