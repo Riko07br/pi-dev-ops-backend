@@ -3,7 +3,7 @@ package com.example.pi_dev_ops_backend.config;
 import com.example.pi_dev_ops_backend.domain.entities.Skill;
 import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.entities.UserProfile;
-import com.example.pi_dev_ops_backend.repository.OpeningRepository;
+import com.example.pi_dev_ops_backend.repository.ListingRepository;
 import com.example.pi_dev_ops_backend.repository.UserProfileRepository;
 import com.example.pi_dev_ops_backend.repository.UserRepository;
 import com.example.pi_dev_ops_backend.security.SecurityConfig;
@@ -21,7 +21,7 @@ public class DevConfig implements CommandLineRunner
     @Autowired
     private UserProfileRepository userProfileRepository;
     @Autowired
-    private OpeningRepository openingRepository;
+    private ListingRepository listingRepository;
     @Autowired
     private SecurityConfig securityConfiguration;
 
