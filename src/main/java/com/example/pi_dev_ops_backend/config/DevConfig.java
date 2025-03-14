@@ -1,9 +1,10 @@
 package com.example.pi_dev_ops_backend.config;
 
+import com.example.pi_dev_ops_backend.domain.entities.Listing;
 import com.example.pi_dev_ops_backend.domain.entities.Skill;
 import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.entities.UserProfile;
-import com.example.pi_dev_ops_backend.repository.OpeningRepository;
+import com.example.pi_dev_ops_backend.repository.ListingRepository;
 import com.example.pi_dev_ops_backend.repository.UserProfileRepository;
 import com.example.pi_dev_ops_backend.repository.UserRepository;
 import com.example.pi_dev_ops_backend.security.SecurityConfig;
@@ -21,7 +22,7 @@ public class DevConfig implements CommandLineRunner
     @Autowired
     private UserProfileRepository userProfileRepository;
     @Autowired
-    private OpeningRepository openingRepository;
+    private ListingRepository listingRepository;
     @Autowired
     private SecurityConfig securityConfiguration;
 
@@ -36,7 +37,7 @@ public class DevConfig implements CommandLineRunner
         User u3 = userRepository.save(new User("user3@mail.com", password));
         UserProfile p1 = new UserProfile("User 3", "123456789", "Street 1", "12345");
         p1.setUser(u3);
-        userProfileRepository.save(p1);
+        p1 = userProfileRepository.save(p1);
 
         User u4 = userRepository.save(new User("user4@mail.com", password));
         UserProfile p2 = new UserProfile("User 4", "123456789", "Street 2", "12345");
@@ -45,7 +46,12 @@ public class DevConfig implements CommandLineRunner
         p2.addSkill(new Skill("Java"));
         p2.addSkill(new Skill("Spring Boot"));
         p2.addSkill(new Skill("Laravel"));
-        userProfileRepository.save(p2);
+        p2 = userProfileRepository.save(p2);
+
+        Listing l1 = new Listing("Listing 1", 1000f, "Description 1", p1);
+        listingRepository.save(l1);
+        Listing l2 = new Listing("Listing 2", 2000f, "Description 2", p1);
+        listingRepository.save(l2);
 
     }
 }

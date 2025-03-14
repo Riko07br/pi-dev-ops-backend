@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -16,7 +17,9 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -43,6 +46,9 @@ public class UserProfile implements Serializable
     @ManyToMany(cascade = CascadeType.ALL)
     @Setter(AccessLevel.NONE)
     private Set<Skill> skills = new HashSet<>();
+
+    @OneToMany(mappedBy = "userProfile")
+    private List<Listing> listings = new ArrayList<>();
 
     public UserProfile(String name, String phone, String address, String postalCode)
     {
