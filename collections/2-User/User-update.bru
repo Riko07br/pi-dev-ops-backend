@@ -4,7 +4,7 @@ meta {
   seq: 4
 }
 
-patch {
+put {
   url: http://localhost:8080/users/{{userId}}
   body: json
   auth: none
@@ -12,6 +12,7 @@ patch {
 
 body:json {
   {
-    "email": "updated-user@mail.com"
+    "email": "updated-user@mail.com",
+    "password": "123456789"
   }
 }

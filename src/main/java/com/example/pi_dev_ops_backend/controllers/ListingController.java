@@ -1,9 +1,9 @@
 package com.example.pi_dev_ops_backend.controllers;
 
-import com.example.pi_dev_ops_backend.domain.dtos.UserProfileRequestDTO;
-import com.example.pi_dev_ops_backend.domain.dtos.UserProfileResponseDTO;
+import com.example.pi_dev_ops_backend.domain.dtos.ListingRequestDTO;
+import com.example.pi_dev_ops_backend.domain.dtos.ListingResponseDTO;
 import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
-import com.example.pi_dev_ops_backend.services.UserProfileService;
+import com.example.pi_dev_ops_backend.services.ListingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -21,47 +21,47 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping ("/user-profiles")
+@RequestMapping ("/listings")
 @RequiredArgsConstructor
-public class UserProfileController
+public class ListingController
 {
-    private final UserProfileService userProfileService;
+    private final ListingService listingService;
 
     @GetMapping
-    public ResponseEntity<Page<UserProfileResponseDTO>> findAll(PaginationParams paginationParams)
+    public ResponseEntity<Page<ListingResponseDTO>> findAll(PaginationParams paginationParams)
     {
-        Page<UserProfileResponseDTO> userProfile = userProfileService.findAll(paginationParams);
-        return ResponseEntity.ok().body(userProfile);
+        Page<ListingResponseDTO> listings = listingService.findAll(paginationParams);
+        return ResponseEntity.ok().body(listings);
     }
 
     @GetMapping ("/{id}")
-    public ResponseEntity<UserProfileResponseDTO> findById(@PathVariable Long id)
+    public ResponseEntity<ListingResponseDTO> findById(@PathVariable Long id)
     {
-        UserProfileResponseDTO responseDTO = userProfileService.findById(id);
+        ListingResponseDTO responseDTO = listingService.findById(id);
         return ResponseEntity.ok().body(responseDTO);
     }
 
     @PostMapping
-    public ResponseEntity<UserProfileResponseDTO> create(
-            @RequestBody UserProfileRequestDTO userRequestDTO,
+    public ResponseEntity<ListingResponseDTO> create(
+            @RequestBody ListingRequestDTO listingRequestDTO,
             Authentication authentication
     ) throws URISyntaxException
     {
-        UserProfileResponseDTO responseDTO = userProfileService.create(userRequestDTO, authentication);
-        return ResponseEntity.created(new URI("/user-profiles/" + responseDTO.id())).body(responseDTO);
+        ListingResponseDTO responseDTO = listingService.create(listingRequestDTO, authentication);
+        return ResponseEntity.created(new URI("/listings/" + responseDTO.id())).body(responseDTO);
     }
 
     @PutMapping ("/{id}")
-    public ResponseEntity<UserProfileResponseDTO> update(@PathVariable Long id, @RequestBody UserProfileRequestDTO requestDTO)
+    public ResponseEntity<ListingResponseDTO> update(@PathVariable Long id, @RequestBody ListingRequestDTO requestDTO)
     {
-        UserProfileResponseDTO responseDTO = userProfileService.update(id, requestDTO);
+        ListingResponseDTO responseDTO = listingService.update(id, requestDTO);
         return ResponseEntity.ok().body(responseDTO);
     }
 
     @DeleteMapping ("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id)
     {
-        userProfileService.delete(id);
+        listingService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

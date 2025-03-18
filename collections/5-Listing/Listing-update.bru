@@ -1,0 +1,19 @@
+meta {
+  name: Listing-update
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/listings/{{listingId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "New updated business title",
+    "price": 20.05,
+    "description": "Do some business for you"
+  }
+}
