@@ -1,0 +1,16 @@
+meta {
+  name: Listing-findAll
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/listings
+  body: none
+  auth: none
+}
+
+params:query {
+  ~page: 0
+  ~size: 5
+}

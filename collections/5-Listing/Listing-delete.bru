@@ -1,0 +1,11 @@
+meta {
+  name: Listing-delete
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:8080/listings/{{listingId}}
+  body: none
+  auth: none
+}
