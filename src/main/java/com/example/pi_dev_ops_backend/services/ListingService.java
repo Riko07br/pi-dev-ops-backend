@@ -54,9 +54,9 @@ public class ListingService
     {
         Listing listing = findEntityById(id);
 
-        listing.setTitle(listingRequestDTO.title() == null ? listing.getTitle() : listingRequestDTO.title());
-        listing.setDescription(listingRequestDTO.description() == null ? listing.getDescription() : listingRequestDTO.description());
-        listing.setPrice(listingRequestDTO.price() == null ? listing.getPrice() : listingRequestDTO.price());
+        listing.setTitle(listingRequestDTO.title());
+        listing.setDescription(listingRequestDTO.description());
+        listing.setPrice(listingRequestDTO.price());
 
         return ListingMapper.INSTANCE.toListingResponseDTO(listingRepository.save(listing));
     }

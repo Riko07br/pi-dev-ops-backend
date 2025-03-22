@@ -43,12 +43,16 @@ public class UserProfile implements Serializable
 
     @OneToOne
     private User user;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @Setter(AccessLevel.NONE)
     private Set<Skill> skills = new HashSet<>();
 
     @OneToMany(mappedBy = "userProfile")
     private List<Listing> listings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "client")
+    private List<ContractedListing> contractedListings = new ArrayList<>();
 
     public UserProfile(String name, String phone, String address, String postalCode)
     {
