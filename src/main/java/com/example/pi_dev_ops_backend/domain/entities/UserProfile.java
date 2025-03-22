@@ -40,6 +40,8 @@ public class UserProfile implements Serializable
     private String phone;
     private String address;
     private String postalCode;
+    private String document;
+    private String description;
 
     @OneToOne
     private User user;

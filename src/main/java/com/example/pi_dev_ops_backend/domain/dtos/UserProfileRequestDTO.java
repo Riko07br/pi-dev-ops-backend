@@ -7,7 +7,9 @@ public record UserProfileRequestDTO(
         String phone,
         String address,
         String postalCode,
-        Set<String> skills
+        Set<String> skills,
+        String document,
+        String description
 )
 {
 }
