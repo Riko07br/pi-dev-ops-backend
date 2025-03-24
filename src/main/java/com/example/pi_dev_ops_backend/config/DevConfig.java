@@ -16,6 +16,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,10 +72,11 @@ public class DevConfig implements CommandLineRunner
             ContractedListing cl = new ContractedListing(
                     finished ? "FINISHED" : "CONTRACTED",
                     "Request " + i,
-                    Instant.now(),
-                    Instant.now(),
+                    Instant.now().minus(10 * (i - 5), ChronoUnit.DAYS),
+                    Instant.now().plus(10 * (i - 5), ChronoUnit.DAYS),
                     listingList.get(i - 6),
                     userProfileList.get(i));
+            contractedListingRepository.save(cl);
         }
 
         User u4 = userRepository.save(new User("fred@mail.com", password));

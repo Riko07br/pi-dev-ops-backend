@@ -2,6 +2,7 @@ package com.example.pi_dev_ops_backend.controllers;
 
 import com.example.pi_dev_ops_backend.domain.dtos.ContractedListingRequestDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.ContractedListingResponseDTO;
+import com.example.pi_dev_ops_backend.domain.queryParams.ContractedListingPaginationParams;
 import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
 import com.example.pi_dev_ops_backend.services.ContractedListingService;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,7 @@ public class ContractedListingController
 
     @GetMapping
     public ResponseEntity<Page<ContractedListingResponseDTO>> findAll(
-            PaginationParams paginationParams,
-            Authentication authentication
+            ContractedListingPaginationParams paginationParams
     )
     {
         Page<ContractedListingResponseDTO> contractedListings = contractedListingService.findAll(paginationParams);
@@ -54,15 +54,15 @@ public class ContractedListingController
         return ResponseEntity.created(new URI("/contracted-listings/" + responseDTO.id())).body(responseDTO);
     }
 
-//    @PutMapping ("/{id}")
-//    public ResponseEntity<ContractedListingResponseDTO> update(
-//            @PathVariable Long id,
-//            @RequestBody ContractedListingRequestDTO requestDTO
-//    )
-//    {
-//        ContractedListingResponseDTO responseDTO = contractedListingService.update(id, requestDTO);
-//        return ResponseEntity.ok().body(responseDTO);
-//    }
+    //    @PutMapping ("/{id}")
+    //    public ResponseEntity<ContractedListingResponseDTO> update(
+    //            @PathVariable Long id,
+    //            @RequestBody ContractedListingRequestDTO requestDTO
+    //    )
+    //    {
+    //        ContractedListingResponseDTO responseDTO = contractedListingService.update(id, requestDTO);
+    //        return ResponseEntity.ok().body(responseDTO);
+    //    }
 
     @DeleteMapping ("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id)

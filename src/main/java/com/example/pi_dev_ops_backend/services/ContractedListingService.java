@@ -7,7 +7,9 @@ import com.example.pi_dev_ops_backend.domain.entities.Listing;
 import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.entities.UserProfile;
 import com.example.pi_dev_ops_backend.domain.mappers.ContractedListingMapper;
+import com.example.pi_dev_ops_backend.domain.queryParams.ContractedListingPaginationParams;
 import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
+import com.example.pi_dev_ops_backend.domain.specifications.ContractedListingSpecification;
 import com.example.pi_dev_ops_backend.repository.ContractedListingRepository;
 import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;
 import com.example.pi_dev_ops_backend.services.exceptions.ResourceNotFoundException;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +29,13 @@ public class ContractedListingService
     private final ListingService listingService;
     private final UserService userService;
 
-    public Page<ContractedListingResponseDTO> findAll(PaginationParams paginationParams)
+    public Page<ContractedListingResponseDTO> findAll(ContractedListingPaginationParams paginationParams)
     {
         Pageable pageable = PageRequest.of(paginationParams.getPage(), paginationParams.getSize());
-        return contractedListingRepository.findAll(pageable).map(ContractedListingMapper.INSTANCE::toContractedListingResponseDTO);
+        Specification<ContractedListing> specification = ContractedListingSpecification.filter(paginationParams);
+        return contractedListingRepository
+                .findAll(specification, pageable)
+                .map(ContractedListingMapper.INSTANCE::toContractedListingResponseDTO);
     }
 
     public ContractedListingResponseDTO findById(Long id)
