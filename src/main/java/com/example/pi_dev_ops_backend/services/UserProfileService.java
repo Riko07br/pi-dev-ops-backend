@@ -7,6 +7,8 @@ import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.entities.UserProfile;
 import com.example.pi_dev_ops_backend.domain.mappers.UserProfileMapper;
 import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
+import com.example.pi_dev_ops_backend.domain.queryParams.UserProfilePaginationParams;
+import com.example.pi_dev_ops_backend.domain.specifications.UserProfileSpecification;
 import com.example.pi_dev_ops_backend.repository.UserProfileRepository;
 import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;
 import com.example.pi_dev_ops_backend.services.exceptions.ResourceNotFoundException;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +28,11 @@ public class UserProfileService
     private final UserService userService;
     private final SkillService skillService;
 
-    public Page<UserProfileResponseDTO> findAll(PaginationParams paginationParams)
+    public Page<UserProfileResponseDTO> findAll(UserProfilePaginationParams paginationParams)
     {
         Pageable pageable = PageRequest.of(paginationParams.getPage(), paginationParams.getSize());
-        return userProfileRepository.findAll(pageable).map(UserProfileMapper.INSTANCE::toUserProfileResponseDTO);
+        Specification<UserProfile> filter = UserProfileSpecification.filter(paginationParams);
+        return userProfileRepository.findAll(filter,pageable).map(UserProfileMapper.INSTANCE::toUserProfileResponseDTO);
     }
 
     public UserProfileResponseDTO findById(Long id)
