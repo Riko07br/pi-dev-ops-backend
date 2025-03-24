@@ -32,4 +32,11 @@ public class AuthController
         UserResponseDTO responseDTO = userService.create(userRequestDTO);
         return ResponseEntity.ok().body(responseDTO);
     }
+
+    @GetMapping ("/refresh-token")
+    public ResponseEntity<UserResponseDTO> refreshToken(Authentication authentication)
+    {
+        UserResponseDTO responseDTO = userService.findByEmail(authentication.getName());
+        return ResponseEntity.ok().body(responseDTO);
+    }
 }
