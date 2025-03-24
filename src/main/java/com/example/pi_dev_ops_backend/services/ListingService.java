@@ -6,7 +6,6 @@ import com.example.pi_dev_ops_backend.domain.entities.Listing;
 import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.mappers.ListingMapper;
 import com.example.pi_dev_ops_backend.domain.queryParams.ListingPaginationParams;
-import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
 import com.example.pi_dev_ops_backend.domain.specifications.ListingSpecification;
 import com.example.pi_dev_ops_backend.repository.ListingRepository;
 import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;

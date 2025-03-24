@@ -2,7 +2,6 @@ package com.example.pi_dev_ops_backend.controllers;
 
 import com.example.pi_dev_ops_backend.domain.dtos.UserRequestDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.UserResponseDTO;
-import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
 import com.example.pi_dev_ops_backend.domain.queryParams.UserPaginationParams;
 import com.example.pi_dev_ops_backend.services.UserService;
 import lombok.RequiredArgsConstructor;

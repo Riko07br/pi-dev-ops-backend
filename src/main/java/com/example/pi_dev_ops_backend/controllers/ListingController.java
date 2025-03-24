@@ -3,7 +3,6 @@ package com.example.pi_dev_ops_backend.controllers;
 import com.example.pi_dev_ops_backend.domain.dtos.ListingRequestDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.ListingResponseDTO;
 import com.example.pi_dev_ops_backend.domain.queryParams.ListingPaginationParams;
-import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
 import com.example.pi_dev_ops_backend.services.ListingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

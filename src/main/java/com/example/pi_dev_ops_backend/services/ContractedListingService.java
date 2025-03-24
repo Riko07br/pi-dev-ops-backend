@@ -8,7 +8,6 @@ import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.entities.UserProfile;
 import com.example.pi_dev_ops_backend.domain.mappers.ContractedListingMapper;
 import com.example.pi_dev_ops_backend.domain.queryParams.ContractedListingPaginationParams;
-import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
 import com.example.pi_dev_ops_backend.domain.specifications.ContractedListingSpecification;
 import com.example.pi_dev_ops_backend.repository.ContractedListingRepository;
 import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;

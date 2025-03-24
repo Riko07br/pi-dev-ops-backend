@@ -6,7 +6,6 @@ import com.example.pi_dev_ops_backend.domain.entities.Skill;
 import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.entities.UserProfile;
 import com.example.pi_dev_ops_backend.domain.mappers.UserProfileMapper;
-import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
 import com.example.pi_dev_ops_backend.domain.queryParams.UserProfilePaginationParams;
 import com.example.pi_dev_ops_backend.domain.specifications.UserProfileSpecification;
 import com.example.pi_dev_ops_backend.repository.UserProfileRepository;
