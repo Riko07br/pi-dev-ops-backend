@@ -10,7 +10,8 @@ public record UserProfileResponseDTO(
         String postalCode,
         Set<String> skills,
         String document,
-        String description
+        String description,
+        String title
 )
 {
 }

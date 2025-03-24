@@ -6,8 +6,14 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class EmailAndPasswordProvider implements AuthenticationProvider
@@ -26,10 +32,16 @@ public class EmailAndPasswordProvider implements AuthenticationProvider
         String email = authentication.getName();
         String password = authentication.getCredentials().toString();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(email, password, null);
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid password");
         }
-        throw new RuntimeException("Invalid password");
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password, null);
+        Map<String, Object> details = new HashMap<>();
+        details.put("userId", user.getId());
+        details.put("accountId", user.getUserProfile() == null ? null : user.getUserProfile().getId());
+        authenticationToken.setDetails(details);
+        return authenticationToken;
     }
 
     @Override

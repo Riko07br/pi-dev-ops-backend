@@ -50,6 +50,7 @@ public class ContractedListingService
         UserProfile client = user.getUserProfile();
 
         ContractedListing contractedListing = ContractedListingMapper.INSTANCE.toContractedListing(contractedListingRequestDTO);
+        contractedListing.setStatus("CONTRACTED");
         contractedListing.setListing(listing);
         contractedListing.setClient(client);
 
@@ -57,17 +58,17 @@ public class ContractedListingService
         return ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(contractedListing);
     }
 
-    public ContractedListingResponseDTO update(Long id, ContractedListingRequestDTO contractedListingRequestDTO)
-    {
-        ContractedListing contractedListing = findEntityById(id);
-
-        contractedListing.setStatus(contractedListingRequestDTO.status() == null ? contractedListing.getStatus() : contractedListingRequestDTO.status());
-        contractedListing.setStartedAt(contractedListingRequestDTO.startedAt() == null ? contractedListing.getStartedAt() : contractedListingRequestDTO.startedAt());
-        contractedListing.setFinishedAt(contractedListingRequestDTO.finishedAt() == null ? contractedListing.getFinishedAt() : contractedListingRequestDTO.finishedAt());
-
-        ContractedListing updatedContractedListing = contractedListingRepository.save(contractedListing);
-        return ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(updatedContractedListing);
-    }
+//    public ContractedListingResponseDTO update(Long id, ContractedListingRequestDTO contractedListingRequestDTO)
+//    {
+//        ContractedListing contractedListing = findEntityById(id);
+//
+//        contractedListing.setStatus(contractedListingRequestDTO.status() == null ? contractedListing.getStatus() : contractedListingRequestDTO.status());
+//        contractedListing.setStartedAt(contractedListingRequestDTO.startedAt() == null ? contractedListing.getStartedAt() : contractedListingRequestDTO.startedAt());
+//        contractedListing.setFinishedAt(contractedListingRequestDTO.finishedAt() == null ? contractedListing.getFinishedAt() : contractedListingRequestDTO.finishedAt());
+//
+//        ContractedListing updatedContractedListing = contractedListingRepository.save(contractedListing);
+//        return ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(updatedContractedListing);
+//    }
 
     public void delete(Long id)
     {
