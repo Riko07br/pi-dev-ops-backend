@@ -2,7 +2,7 @@ package com.example.pi_dev_ops_backend.controllers;
 
 import com.example.pi_dev_ops_backend.domain.dtos.ListingRequestDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.ListingResponseDTO;
-import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
+import com.example.pi_dev_ops_backend.domain.queryParams.ListingPaginationParams;
 import com.example.pi_dev_ops_backend.services.ListingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ public class ListingController
     private final ListingService listingService;
 
     @GetMapping
-    public ResponseEntity<Page<ListingResponseDTO>> findAll(PaginationParams paginationParams)
+    public ResponseEntity<Page<ListingResponseDTO>> findAll(ListingPaginationParams paginationParams)
     {
         Page<ListingResponseDTO> listings = listingService.findAll(paginationParams);
         return ResponseEntity.ok().body(listings);

@@ -5,7 +5,8 @@ import com.example.pi_dev_ops_backend.domain.dtos.ListingResponseDTO;
 import com.example.pi_dev_ops_backend.domain.entities.Listing;
 import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.mappers.ListingMapper;
-import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
+import com.example.pi_dev_ops_backend.domain.queryParams.ListingPaginationParams;
+import com.example.pi_dev_ops_backend.domain.specifications.ListingSpecification;
 import com.example.pi_dev_ops_backend.repository.ListingRepository;
 import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;
 import com.example.pi_dev_ops_backend.services.exceptions.ResourceNotFoundException;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +25,13 @@ public class ListingService
     private final ListingRepository listingRepository;
     private final UserService userService;
 
-    public Page<ListingResponseDTO> findAll(PaginationParams paginationParams)
+    public Page<ListingResponseDTO> findAll(ListingPaginationParams paginationParams)
     {
         Pageable pageable = PageRequest.of(paginationParams.getPage(), paginationParams.getSize());
-        return listingRepository.findAll(pageable).map(ListingMapper.INSTANCE::toListingResponseDTO);
+        Specification<Listing> specification = ListingSpecification.filter(paginationParams);
+        return listingRepository
+                .findAll(specification, pageable)
+                .map(ListingMapper.INSTANCE::toListingResponseDTO);
     }
 
     public ListingResponseDTO findById(Long id)

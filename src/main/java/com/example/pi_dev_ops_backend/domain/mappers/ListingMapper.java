@@ -11,6 +11,15 @@ public interface ListingMapper
 {
     ListingMapper INSTANCE = Mappers.getMapper(ListingMapper.class);
 
-    ListingResponseDTO toListingResponseDTO(Listing listing);
     Listing toListing(ListingRequestDTO listingRequestDTO);
+    default ListingResponseDTO toListingResponseDTO(Listing listing)
+    {
+        return new ListingResponseDTO(
+                listing.getId(),
+                listing.getTitle(),
+                listing.getPrice(),
+                listing.getDescription(),
+                UserProfileMapper.INSTANCE.toListingUserProfileResponseDTO(listing.getUserProfile())
+        );
+    }
 }

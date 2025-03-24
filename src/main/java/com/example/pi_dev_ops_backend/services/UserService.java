@@ -4,15 +4,16 @@ import com.example.pi_dev_ops_backend.domain.dtos.UserRequestDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.UserResponseDTO;
 import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.mappers.UserMapper;
-import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
+import com.example.pi_dev_ops_backend.domain.queryParams.UserPaginationParams;
+import com.example.pi_dev_ops_backend.domain.specifications.UserSpecification;
 import com.example.pi_dev_ops_backend.repository.UserRepository;
 import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;
 import com.example.pi_dev_ops_backend.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +26,11 @@ public class UserService
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Page<UserResponseDTO> findAll(PaginationParams paginationParams)
+    public Page<UserResponseDTO> findAll(UserPaginationParams userPaginationParams)
     {
-        Pageable pageable = PageRequest.of(paginationParams.getPage(), paginationParams.getSize());
-        return userRepository.findAll(pageable).map(UserMapper.INSTANCE::toUserResponseDTO);
+        Pageable pageable = PageRequest.of(userPaginationParams.getPage(), userPaginationParams.getSize());
+        Specification<User> specification = UserSpecification.filter(userPaginationParams);
+        return userRepository.findAll(specification,pageable).map(UserMapper.INSTANCE::toUserResponseDTO);
     }
 
     public UserResponseDTO findById(Long id)

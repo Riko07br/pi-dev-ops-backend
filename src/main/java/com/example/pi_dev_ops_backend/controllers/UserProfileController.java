@@ -2,7 +2,7 @@ package com.example.pi_dev_ops_backend.controllers;
 
 import com.example.pi_dev_ops_backend.domain.dtos.UserProfileRequestDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.UserProfileResponseDTO;
-import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
+import com.example.pi_dev_ops_backend.domain.queryParams.UserProfilePaginationParams;
 import com.example.pi_dev_ops_backend.services.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ public class UserProfileController
     private final UserProfileService userProfileService;
 
     @GetMapping
-    public ResponseEntity<Page<UserProfileResponseDTO>> findAll(PaginationParams paginationParams)
+    public ResponseEntity<Page<UserProfileResponseDTO>> findAll(UserProfilePaginationParams paginationParams)
     {
         Page<UserProfileResponseDTO> userProfile = userProfileService.findAll(paginationParams);
         return ResponseEntity.ok().body(userProfile);

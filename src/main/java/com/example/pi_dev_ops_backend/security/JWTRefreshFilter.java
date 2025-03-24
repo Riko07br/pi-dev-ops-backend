@@ -3,6 +3,8 @@ package com.example.pi_dev_ops_backend.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.example.pi_dev_ops_backend.domain.entities.User;
+import com.example.pi_dev_ops_backend.repository.UserRepository;
 import com.example.pi_dev_ops_backend.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,12 +18,16 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
-import java.util.Objects;
 
-public class JWTGeneratorFilter extends OncePerRequestFilter
+public class JWTRefreshFilter extends OncePerRequestFilter
 {
     static final String JWT_SECRET_KEY = "aw0&apom.w5@7&r-+ty6682/-nhQEfyjyilk89tyK+-Igs1[[hdfw223423fRr";
+    private final UserRepository userRepository;
+
+    public JWTRefreshFilter(UserRepository userRepository)
+    {
+        this.userRepository = userRepository;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException
@@ -32,16 +38,22 @@ public class JWTGeneratorFilter extends OncePerRequestFilter
             try
             {
                 Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET_KEY.getBytes(StandardCharsets.UTF_8));
-                String token = JWT.create()
+                String email = authentication.getName();
+
+                User user = userRepository
+                        .findByEmail(email)
+                        .orElseThrow(() -> new ResourceNotFoundException(User.class, "email: " + email));
+
+                String newToken = JWT.create()
                         .withIssuer("SeriousBizness")
                         .withSubject("User Info")
-                        .withClaim("username", authentication.getName())
-                        .withClaim("userId", (Long) getDetail(authentication, "userId"))
-                        .withClaim("accountId", (Long) getDetail(authentication, "accountId"))
+                        .withClaim("username", user.getEmail())
+                        .withClaim("userId", user.getId())
+                        .withClaim("accountId", user.getUserProfile() == null ? null : user.getUserProfile().getId())
                         .withIssuedAt(Instant.now())
                         .withExpiresAt(Instant.now().plus(5, ChronoUnit.HOURS))
                         .sign(algorithm);
-                response.setHeader("Authorization", token);
+                response.setHeader("Authorization", newToken);
             }
             catch (JWTCreationException | ResourceNotFoundException exception)
             {
@@ -54,25 +66,8 @@ public class JWTGeneratorFilter extends OncePerRequestFilter
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException
     {
-        return !request.getServletPath().equals("/auth/login");
-    }
-
-    private <T> T getDetail(Authentication authentication, String key)
-    {
-        try
-        {
-            Map<String, Object> details = (Map<String, Object>) authentication.getDetails();
-            if (Objects.isNull(details) || details.isEmpty() || !details.containsKey(key) || Objects.isNull(details.get(key)))
-            {
-                return null;
-            }
-            return (T) details.get(key);
-
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
+        String servletPath = request.getServletPath();
+        return !servletPath.equals("/auth/refresh-token");
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.pi_dev_ops_backend.domain.mappers;
 
+import com.example.pi_dev_ops_backend.domain.dtos.ListingUserProfileResponseDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.UserProfileRequestDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.UserProfileResponseDTO;
 import com.example.pi_dev_ops_backend.domain.entities.Skill;
@@ -17,6 +18,8 @@ public interface UserProfileMapper
 
     @Mapping (target = "skills", ignore = true)
     UserProfile toUserProfile(UserProfileRequestDTO userProfileRequestDTO);
+
+    ListingUserProfileResponseDTO toListingUserProfileResponseDTO(UserProfile userProfile);
 
     default UserProfileResponseDTO toUserProfileResponseDTO(UserProfile userProfile)
     {

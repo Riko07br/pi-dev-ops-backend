@@ -2,7 +2,7 @@ package com.example.pi_dev_ops_backend.controllers;
 
 import com.example.pi_dev_ops_backend.domain.dtos.UserRequestDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.UserResponseDTO;
-import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
+import com.example.pi_dev_ops_backend.domain.queryParams.UserPaginationParams;
 import com.example.pi_dev_ops_backend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,9 +27,9 @@ public class UserController
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<Page<UserResponseDTO>> findAll(PaginationParams paginationParams)
+    public ResponseEntity<Page<UserResponseDTO>> findAll(UserPaginationParams userPaginationParams)
     {
-        Page<UserResponseDTO> users = userService.findAll(paginationParams);
+        Page<UserResponseDTO> users = userService.findAll(userPaginationParams);
         return ResponseEntity.ok().body(users);
     }
 

@@ -4,7 +4,8 @@ public record ListingResponseDTO(
         Long id,
         String title,
         Float price,
-        String description
+        String description,
+        ListingUserProfileResponseDTO userProfile
 )
 {
 }
