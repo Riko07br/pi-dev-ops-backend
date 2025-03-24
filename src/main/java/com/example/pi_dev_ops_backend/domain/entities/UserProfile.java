@@ -42,6 +42,7 @@ public class UserProfile implements Serializable
     private String postalCode;
     private String document;
     private String description;
+    private String title;
 
     @OneToOne
     private User user;
@@ -56,12 +57,15 @@ public class UserProfile implements Serializable
     @OneToMany(mappedBy = "client")
     private List<ContractedListing> contractedListings = new ArrayList<>();
 
-    public UserProfile(String name, String phone, String address, String postalCode)
+    public UserProfile(String name, String phone, String address, String postalCode, String document, String description, String title)
     {
         this.name = name;
         this.phone = phone;
         this.address = address;
         this.postalCode = postalCode;
+        this.document = document;
+        this.description = description;
+        this.title = title;
     }
 
     public void addSkill(Skill skill)

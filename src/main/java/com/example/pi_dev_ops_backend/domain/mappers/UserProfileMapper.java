@@ -28,7 +28,8 @@ public interface UserProfileMapper
                 userProfile.getPostalCode(),
                 userProfile.getSkills().stream().map(Skill::getName).collect(Collectors.toSet()),
                 userProfile.getDocument(),
-                userProfile.getDescription()
+                userProfile.getDescription(),
+                userProfile.getTitle()
         );
     }
 }

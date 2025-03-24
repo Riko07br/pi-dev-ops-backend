@@ -47,6 +47,7 @@ public class UserProfileService
 
         UserProfile createdUserProfile = UserProfileMapper.INSTANCE.toUserProfile(userProfileRequestDTO);
         createdUserProfile.setUser(user);
+        user.setUserProfile(createdUserProfile);
 
         userProfileRequestDTO.skills().forEach(skillName -> {
             try

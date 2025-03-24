@@ -41,14 +41,27 @@ public class DevConfig implements CommandLineRunner
         User u2 = userRepository.save(new User("user2@mail.com", password));
 
         User u3 = userRepository.save(new User("user3@mail.com", password));
-        UserProfile p1 = new UserProfile("User 3", "123456789", "Street 1", "12345");
+        UserProfile p1 = new UserProfile(
+                "User 3",
+                "123456789",
+                "Street 1",
+                "12345",
+                "Document 1",
+                "Description 1",
+                "Title 1");
         p1.setUser(u3);
         p1 = userProfileRepository.save(p1);
 
         User u4 = userRepository.save(new User("user4@mail.com", password));
-        UserProfile p2 = new UserProfile("User 4", "123456789", "Street 2", "12345");
+        UserProfile p2 = new UserProfile(
+                "Freddie Mercury",
+                "987654321",
+                "Street 2",
+                "54321",
+                "Document 2",
+                "I make a super sonic man out of you",
+                "Master of the universe");
         p2.setUser(u4);
-        p2 = userProfileRepository.save(p2);
         p2.addSkill(new Skill("Java"));
         p2.addSkill(new Skill("Spring Boot"));
         p2.addSkill(new Skill("Laravel"));
