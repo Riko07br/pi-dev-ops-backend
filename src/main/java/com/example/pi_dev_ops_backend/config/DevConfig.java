@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @Profile ({ "dev" })
@@ -36,23 +38,43 @@ public class DevConfig implements CommandLineRunner
     public void run(String... args) throws Exception
     {
         String password = securityConfiguration.passwordEncoder().encode("123456");
+        List<UserProfile> userProfileList = new ArrayList<>();
+        for (int i = 0; i < 10; i++)
+        {
+            User u = userRepository.save(new User("user" + i + "@mail.com", password));
+            UserProfile p = new UserProfile(
+                    "User " + i,
+                    "123456789-" + i,
+                    "Street " + i,
+                    "12345",
+                    "Document " + i,
+                    "Description " + i,
+                    "Title " + i);
+            p.setUser(u);
+            p.addSkill(new Skill(i % 2 == 0 ? "Java" : "Python"));
+            p.addSkill(new Skill(i % 2 == 0 ? "Spring boot" : "Django"));
+            userProfileList.add(userProfileRepository.save(p));
+        }
+        List<Listing> listingList = new ArrayList<>();
+        for (int i = 0; i < 5; i++)
+        {
+            Listing l = new Listing("Listing " + i, 750f * i, "Description " + i, userProfileList.get(i));
+            listingList.add(listingRepository.save(l));
+        }
 
-        User u1 = userRepository.save(new User("user1@mail.com", password));
-        User u2 = userRepository.save(new User("user2@mail.com", password));
+        for (int i = 6; i < 10; i++)
+        {
+            boolean finished = i % 2 == 0;
+            ContractedListing cl = new ContractedListing(
+                    finished ? "FINISHED" : "CONTRACTED",
+                    "Request " + i,
+                    Instant.now(),
+                    Instant.now(),
+                    listingList.get(i - 6),
+                    userProfileList.get(i));
+        }
 
-        User u3 = userRepository.save(new User("user3@mail.com", password));
-        UserProfile p1 = new UserProfile(
-                "User 3",
-                "123456789",
-                "Street 1",
-                "12345",
-                "Document 1",
-                "Description 1",
-                "Title 1");
-        p1.setUser(u3);
-        p1 = userProfileRepository.save(p1);
-
-        User u4 = userRepository.save(new User("user4@mail.com", password));
+        User u4 = userRepository.save(new User("fred@mail.com", password));
         UserProfile p2 = new UserProfile(
                 "Freddie Mercury",
                 "987654321",
@@ -65,6 +87,7 @@ public class DevConfig implements CommandLineRunner
         p2.addSkill(new Skill("Java"));
         p2.addSkill(new Skill("Spring Boot"));
         p2.addSkill(new Skill("Laravel"));
+        p2.addSkill(new Skill("Sing"));
         p2 = userProfileRepository.save(p2);
 
         Listing l1 = new Listing("Listing 1", 1000f, "Description 1", p2);
@@ -72,11 +95,11 @@ public class DevConfig implements CommandLineRunner
         Listing l2 = new Listing("Listing 2", 2000f, "Description 2", p2);
         l2 = listingRepository.save(l2);
 
-        ContractedListing cl1 = new ContractedListing("Pending", "Request 1", null, null, l1, p1);
+        ContractedListing cl1 = new ContractedListing("Pending", "Request 1", null, null, l1, userProfileList.get(0));
         contractedListingRepository.save(cl1);
-        ContractedListing cl2 = new ContractedListing("Accepted", "Request 2", Instant.now(), null, l2, p1);
+        ContractedListing cl2 = new ContractedListing("Accepted", "Request 2", Instant.now(), null, l2, userProfileList.get(1));
         contractedListingRepository.save(cl2);
-        ContractedListing cl3 = new ContractedListing("Finished", "Request 3", Instant.now(), Instant.now(), l1, p1);
+        ContractedListing cl3 = new ContractedListing("Finished", "Request 3", Instant.now(), Instant.now(), l1, userProfileList.get(2));
         contractedListingRepository.save(cl3);
 
     }
