@@ -1,0 +1,25 @@
+meta {
+  name: CListing-create
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/contracted-listings
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "clientRequest": "New business title",
+    "startedAt": "2025-03-24T13:17:49Z",
+    "finishedAt": "2025-08-24T13:17:49Z",
+    "listingId": 1
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("contractedListingId", res.body.id)
+  
+}
