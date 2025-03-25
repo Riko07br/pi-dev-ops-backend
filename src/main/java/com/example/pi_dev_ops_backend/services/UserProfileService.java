@@ -102,4 +102,10 @@ public class UserProfileService
         return userProfileRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(UserProfile.class, id));
     }
+
+    UserProfile findEntityByEmail(String email)
+    {
+        return userProfileRepository.findByUserEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException(UserProfile.class, email));
+    }
 }

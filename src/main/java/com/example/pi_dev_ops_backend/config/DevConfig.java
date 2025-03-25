@@ -1,11 +1,13 @@
 package com.example.pi_dev_ops_backend.config;
 
 import com.example.pi_dev_ops_backend.domain.entities.ContractedListing;
+import com.example.pi_dev_ops_backend.domain.entities.Evaluation;
 import com.example.pi_dev_ops_backend.domain.entities.Listing;
 import com.example.pi_dev_ops_backend.domain.entities.Skill;
 import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.entities.UserProfile;
 import com.example.pi_dev_ops_backend.repository.ContractedListingRepository;
+import com.example.pi_dev_ops_backend.repository.EvaluationRepository;
 import com.example.pi_dev_ops_backend.repository.ListingRepository;
 import com.example.pi_dev_ops_backend.repository.UserProfileRepository;
 import com.example.pi_dev_ops_backend.repository.UserRepository;
@@ -32,6 +34,8 @@ public class DevConfig implements CommandLineRunner
     private ListingRepository listingRepository;
     @Autowired
     private ContractedListingRepository contractedListingRepository;
+    @Autowired
+    private EvaluationRepository evaluationRepository;
     @Autowired
     private SecurityConfig securityConfiguration;
 
@@ -100,9 +104,14 @@ public class DevConfig implements CommandLineRunner
         ContractedListing cl1 = new ContractedListing("Pending", "Request 1", null, null, l1, userProfileList.get(0));
         contractedListingRepository.save(cl1);
         ContractedListing cl2 = new ContractedListing("Accepted", "Request 2", Instant.now(), null, l2, userProfileList.get(1));
-        contractedListingRepository.save(cl2);
+        cl2 = contractedListingRepository.save(cl2);
         ContractedListing cl3 = new ContractedListing("Finished", "Request 3", Instant.now(), Instant.now(), l1, userProfileList.get(2));
-        contractedListingRepository.save(cl3);
+        cl3 = contractedListingRepository.save(cl3);
+
+        Evaluation e1 = new Evaluation("Good job", 5, Instant.now(),cl2);
+        evaluationRepository.save(e1);
+        Evaluation e2 = new Evaluation("Bad job", 1, Instant.now(),cl3);
+        evaluationRepository.save(e2);
 
     }
 }

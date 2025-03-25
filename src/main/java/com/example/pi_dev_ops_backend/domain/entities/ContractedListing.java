@@ -38,6 +38,8 @@ public class ContractedListing implements Serializable
     private UserProfile client;
     @ManyToOne
     private Listing listing;
+    @OneToOne(mappedBy = "contractedListing")
+    private Evaluation evaluation;
 
     public ContractedListing(
             String status,
