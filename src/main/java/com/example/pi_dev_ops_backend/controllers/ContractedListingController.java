@@ -2,6 +2,7 @@ package com.example.pi_dev_ops_backend.controllers;
 
 import com.example.pi_dev_ops_backend.domain.dtos.ContractedListingRequestDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.ContractedListingResponseDTO;
+import com.example.pi_dev_ops_backend.domain.dtos.ContractedListingUpdateRequestDTO;
 import com.example.pi_dev_ops_backend.domain.queryParams.ContractedListingPaginationParams;
 import com.example.pi_dev_ops_backend.services.ContractedListingService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,20 +54,31 @@ public class ContractedListingController
         return ResponseEntity.created(new URI("/contracted-listings/" + responseDTO.id())).body(responseDTO);
     }
 
-    //    @PutMapping ("/{id}")
-    //    public ResponseEntity<ContractedListingResponseDTO> update(
-    //            @PathVariable Long id,
-    //            @RequestBody ContractedListingRequestDTO requestDTO
-    //    )
-    //    {
-    //        ContractedListingResponseDTO responseDTO = contractedListingService.update(id, requestDTO);
-    //        return ResponseEntity.ok().body(responseDTO);
-    //    }
+    @PutMapping ("/{id}")
+    public ResponseEntity<ContractedListingResponseDTO> update(
+            @PathVariable Long id,
+            @RequestBody ContractedListingRequestDTO requestDTO
+    )
+    {
+        ContractedListingResponseDTO responseDTO = contractedListingService.update(id, requestDTO);
+        return ResponseEntity.ok().body(responseDTO);
+    }
 
     @DeleteMapping ("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id)
     {
         contractedListingService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping ("/{id}/status")
+    public ResponseEntity<ContractedListingResponseDTO> updateStatus(
+            @PathVariable Long id,
+            @RequestBody ContractedListingUpdateRequestDTO requestDTO,
+            Authentication authentication
+    )
+    {
+        ContractedListingResponseDTO responseDTO = contractedListingService.updateStatus(id, requestDTO, authentication);
+        return ResponseEntity.ok().body(responseDTO);
     }
 }
