@@ -12,11 +12,12 @@ import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;
 import com.example.pi_dev_ops_backend.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +28,7 @@ public class ListingService
 
     public Page<ListingResponseDTO> findAll(ListingPaginationParams paginationParams)
     {
-        Pageable pageable = PageRequest.of(paginationParams.getPage(), paginationParams.getSize());
+        Pageable pageable = paginationParams.getPageable();
         Specification<Listing> specification = ListingSpecification.filter(paginationParams);
         return listingRepository
                 .findAll(specification, pageable)
@@ -49,6 +50,7 @@ public class ListingService
         }
 
         Listing listing = ListingMapper.INSTANCE.toListing(listingRequestDTO);
+        listing.setCreationDate(LocalDate.now());
         listing.setUserProfile(user.getUserProfile());
         listing = listingRepository.save(listing);
 
@@ -62,6 +64,7 @@ public class ListingService
         listing.setTitle(listingRequestDTO.title());
         listing.setDescription(listingRequestDTO.description());
         listing.setPrice(listingRequestDTO.price());
+        listing.setLocation(listingRequestDTO.location());
 
         return ListingMapper.INSTANCE.toListingResponseDTO(listingRepository.save(listing));
     }

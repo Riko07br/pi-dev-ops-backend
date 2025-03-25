@@ -10,7 +10,6 @@ import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;
 import com.example.pi_dev_ops_backend.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ public class SkillService
 
     public Page<SkillResponseDTO> findAll(PaginationParams paginationParams)
     {
-        Pageable pageable = PageRequest.of(paginationParams.getPage(), paginationParams.getSize());
+        Pageable pageable = paginationParams.getPageable();
         return skillRepository.findAll(pageable).map(SkillMapper.INSTANCE::toSkillResponseDTO);
     }
 

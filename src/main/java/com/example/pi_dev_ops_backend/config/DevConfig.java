@@ -1,11 +1,13 @@
 package com.example.pi_dev_ops_backend.config;
 
 import com.example.pi_dev_ops_backend.domain.entities.ContractedListing;
+import com.example.pi_dev_ops_backend.domain.entities.Evaluation;
 import com.example.pi_dev_ops_backend.domain.entities.Listing;
 import com.example.pi_dev_ops_backend.domain.entities.Skill;
 import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.entities.UserProfile;
 import com.example.pi_dev_ops_backend.repository.ContractedListingRepository;
+import com.example.pi_dev_ops_backend.repository.EvaluationRepository;
 import com.example.pi_dev_ops_backend.repository.ListingRepository;
 import com.example.pi_dev_ops_backend.repository.UserProfileRepository;
 import com.example.pi_dev_ops_backend.repository.UserRepository;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,8 @@ public class DevConfig implements CommandLineRunner
     private ListingRepository listingRepository;
     @Autowired
     private ContractedListingRepository contractedListingRepository;
+    @Autowired
+    private EvaluationRepository evaluationRepository;
     @Autowired
     private SecurityConfig securityConfiguration;
 
@@ -59,7 +64,13 @@ public class DevConfig implements CommandLineRunner
         List<Listing> listingList = new ArrayList<>();
         for (int i = 0; i < 5; i++)
         {
-            Listing l = new Listing("Listing " + i, 750f * i, "Description " + i, userProfileList.get(i));
+            Listing l = new Listing(
+                    "Listing " + i,
+                    750f * i,
+                    "Description " + i,
+                    "Location " + i,
+                    LocalDate.of(2025,i+2,(i+2) * 3),
+                    userProfileList.get(i));
             listingList.add(listingRepository.save(l));
         }
 
@@ -92,17 +103,22 @@ public class DevConfig implements CommandLineRunner
         p2.addSkill(new Skill("Sing"));
         p2 = userProfileRepository.save(p2);
 
-        Listing l1 = new Listing("Listing 1", 1000f, "Description 1", p2);
+        Listing l1 = new Listing("Listing 1", 1000f, "Description 1", "Location 1", LocalDate.of(2025,2,3), p2);
         l1 = listingRepository.save(l1);
-        Listing l2 = new Listing("Listing 2", 2000f, "Description 2", p2);
+        Listing l2 = new Listing("Listing 2", 2000f, "Description 2", "Location 2", LocalDate.of(2025,8,3), p2);
         l2 = listingRepository.save(l2);
 
         ContractedListing cl1 = new ContractedListing("Pending", "Request 1", null, null, l1, userProfileList.get(0));
         contractedListingRepository.save(cl1);
         ContractedListing cl2 = new ContractedListing("Accepted", "Request 2", Instant.now(), null, l2, userProfileList.get(1));
-        contractedListingRepository.save(cl2);
+        cl2 = contractedListingRepository.save(cl2);
         ContractedListing cl3 = new ContractedListing("Finished", "Request 3", Instant.now(), Instant.now(), l1, userProfileList.get(2));
-        contractedListingRepository.save(cl3);
+        cl3 = contractedListingRepository.save(cl3);
+
+        Evaluation e1 = new Evaluation("Good job", 5, Instant.now(),cl2);
+        evaluationRepository.save(e1);
+        Evaluation e2 = new Evaluation("Bad job", 1, Instant.now(),cl3);
+        evaluationRepository.save(e2);
 
     }
 }
