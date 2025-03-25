@@ -15,7 +15,6 @@ import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;
 import com.example.pi_dev_ops_backend.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
@@ -33,7 +32,7 @@ public class ContractedListingService
 
     public Page<ContractedListingResponseDTO> findAll(ContractedListingPaginationParams paginationParams)
     {
-        Pageable pageable = PageRequest.of(paginationParams.getPage(), paginationParams.getSize());
+        Pageable pageable = paginationParams.getPageable();
         Specification<ContractedListing> specification = ContractedListingSpecification.filter(paginationParams);
         return contractedListingRepository
                 .findAll(specification, pageable)

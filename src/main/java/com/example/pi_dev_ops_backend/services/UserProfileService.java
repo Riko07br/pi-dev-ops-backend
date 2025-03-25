@@ -13,7 +13,6 @@ import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;
 import com.example.pi_dev_ops_backend.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
@@ -29,7 +28,7 @@ public class UserProfileService
 
     public Page<UserProfileResponseDTO> findAll(UserProfilePaginationParams paginationParams)
     {
-        Pageable pageable = PageRequest.of(paginationParams.getPage(), paginationParams.getSize());
+        Pageable pageable = paginationParams.getPageable();
         Specification<UserProfile> filter = UserProfileSpecification.filter(paginationParams);
         return userProfileRepository.findAll(filter,pageable).map(UserProfileMapper.INSTANCE::toUserProfileResponseDTO);
     }

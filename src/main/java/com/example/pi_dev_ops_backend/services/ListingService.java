@@ -28,7 +28,7 @@ public class ListingService
 
     public Page<ListingResponseDTO> findAll(ListingPaginationParams paginationParams)
     {
-        Pageable pageable = PageRequest.of(paginationParams.getPage(), paginationParams.getSize());
+        Pageable pageable = paginationParams.getPageable();
         Specification<Listing> specification = ListingSpecification.filter(paginationParams);
         return listingRepository
                 .findAll(specification, pageable)
