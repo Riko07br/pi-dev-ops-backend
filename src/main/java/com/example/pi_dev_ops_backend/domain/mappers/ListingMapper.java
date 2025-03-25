@@ -19,6 +19,8 @@ public interface ListingMapper
                 listing.getTitle(),
                 listing.getPrice(),
                 listing.getDescription(),
+                listing.getLocation(),
+                listing.getCreationDate(),
                 UserProfileMapper.INSTANCE.toListingUserProfileResponseDTO(listing.getUserProfile())
         );
     }

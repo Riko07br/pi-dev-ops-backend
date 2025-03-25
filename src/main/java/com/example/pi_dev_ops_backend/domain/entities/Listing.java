@@ -13,6 +13,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +33,8 @@ public class Listing implements Serializable
     private String title;
     private Float price;
     private String description;
+    private String location;
+    private LocalDate creationDate;
 
     @ManyToOne
     private UserProfile userProfile;
@@ -39,11 +42,20 @@ public class Listing implements Serializable
     @OneToMany (mappedBy = "listing")
     private List<ContractedListing> contractedListings = new ArrayList<>();
 
-    public Listing(String title, Float price, String description, UserProfile userProfile)
+    public Listing(
+            String title,
+            Float price,
+            String description,
+            String location,
+            LocalDate creationDate,
+            UserProfile userProfile
+    )
     {
         this.title = title;
         this.price = price;
         this.description = description;
+        this.location = location;
+        this.creationDate = creationDate;
         this.userProfile = userProfile;
     }
 

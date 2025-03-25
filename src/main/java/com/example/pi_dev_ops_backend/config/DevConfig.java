@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,13 @@ public class DevConfig implements CommandLineRunner
         List<Listing> listingList = new ArrayList<>();
         for (int i = 0; i < 5; i++)
         {
-            Listing l = new Listing("Listing " + i, 750f * i, "Description " + i, userProfileList.get(i));
+            Listing l = new Listing(
+                    "Listing " + i,
+                    750f * i,
+                    "Description " + i,
+                    "Location " + i,
+                    LocalDate.of(2025,i+2,(i+2) * 3),
+                    userProfileList.get(i));
             listingList.add(listingRepository.save(l));
         }
 
@@ -96,9 +103,9 @@ public class DevConfig implements CommandLineRunner
         p2.addSkill(new Skill("Sing"));
         p2 = userProfileRepository.save(p2);
 
-        Listing l1 = new Listing("Listing 1", 1000f, "Description 1", p2);
+        Listing l1 = new Listing("Listing 1", 1000f, "Description 1", "Location 1", LocalDate.of(2025,2,3), p2);
         l1 = listingRepository.save(l1);
-        Listing l2 = new Listing("Listing 2", 2000f, "Description 2", p2);
+        Listing l2 = new Listing("Listing 2", 2000f, "Description 2", "Location 2", LocalDate.of(2025,8,3), p2);
         l2 = listingRepository.save(l2);
 
         ContractedListing cl1 = new ContractedListing("Pending", "Request 1", null, null, l1, userProfileList.get(0));
