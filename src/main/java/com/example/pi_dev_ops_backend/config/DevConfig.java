@@ -69,7 +69,7 @@ public class DevConfig implements CommandLineRunner
                     750f * i,
                     "Description " + i,
                     "Location " + i,
-                    LocalDate.of(2025,i+2,(i+2) * 3),
+                    LocalDate.of(2025, i + 2, (i + 2) * 3),
                     userProfileList.get(i));
             listingList.add(listingRepository.save(l));
         }
@@ -78,13 +78,18 @@ public class DevConfig implements CommandLineRunner
         {
             boolean finished = i % 2 == 0;
             ContractedListing cl = new ContractedListing(
-                    finished ? "FINISHED" : "CONTRACTED",
+                    finished ? "ACCEPTED" : "CONTRACTED",
                     "Request " + i,
-                    Instant.now().minus(10 * (i - 5), ChronoUnit.DAYS),
-                    Instant.now().plus(10 * (i - 5), ChronoUnit.DAYS),
+                    getInstant(10 * (i - 5), true),
+                    getInstant(10 * (i - 5), false),
                     listingList.get(i - 6),
                     userProfileList.get(i));
             contractedListingRepository.save(cl);
+            if (finished)
+            {
+                Evaluation e = new Evaluation("Good job", 4, getInstant(11 * (i - 5), true), cl);
+                evaluationRepository.save(e);
+            }
         }
 
         User u4 = userRepository.save(new User("fred@mail.com", password));
@@ -103,22 +108,29 @@ public class DevConfig implements CommandLineRunner
         p2.addSkill(new Skill("Sing"));
         p2 = userProfileRepository.save(p2);
 
-        Listing l1 = new Listing("Listing 1", 1000f, "Description 1", "Location 1", LocalDate.of(2025,2,3), p2);
+        Listing l1 = new Listing("Listing 1", 1000f, "Description 1", "Location 1", LocalDate.of(2025, 2, 3), p2);
         l1 = listingRepository.save(l1);
-        Listing l2 = new Listing("Listing 2", 2000f, "Description 2", "Location 2", LocalDate.of(2025,8,3), p2);
+        Listing l2 = new Listing("Listing 2", 2000f, "Description 2", "Location 2", LocalDate.of(2025, 8, 3), p2);
         l2 = listingRepository.save(l2);
 
-        ContractedListing cl1 = new ContractedListing("Pending", "Request 1", null, null, l1, userProfileList.get(0));
+        ContractedListing cl1 = new ContractedListing("CONTRACTED", "Request 1", null, null, l1, userProfileList.get(0));
         contractedListingRepository.save(cl1);
-        ContractedListing cl2 = new ContractedListing("Accepted", "Request 2", Instant.now(), null, l2, userProfileList.get(1));
+        ContractedListing cl2 = new ContractedListing("CANCELLED", "Request 2", getInstant(1, true), null, l2, userProfileList.get(1));
         cl2 = contractedListingRepository.save(cl2);
-        ContractedListing cl3 = new ContractedListing("Finished", "Request 3", Instant.now(), Instant.now(), l1, userProfileList.get(2));
+        ContractedListing cl3 = new ContractedListing("ACCEPTED", "Request 3", getInstant(2, true), Instant.now(), l1, userProfileList.get(2));
         cl3 = contractedListingRepository.save(cl3);
 
-        Evaluation e1 = new Evaluation("Good job", 5, Instant.now(),cl2);
+        Evaluation e1 = new Evaluation("Good job", 5, Instant.now(), cl2);
         evaluationRepository.save(e1);
-        Evaluation e2 = new Evaluation("Bad job", 1, Instant.now(),cl3);
+        Evaluation e2 = new Evaluation("Bad job", 1, Instant.now(), cl3);
         evaluationRepository.save(e2);
+    }
 
+    private Instant getInstant(long days, boolean isMinus)
+    {
+        Instant now = Instant.now();
+        return !isMinus
+                ? now.plus(days, ChronoUnit.DAYS)
+                : now.minus(days, ChronoUnit.DAYS);
     }
 }

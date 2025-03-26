@@ -1,0 +1,11 @@
+meta {
+  name: Evaluation-delete
+  type: http
+  seq: 3
+}
+
+delete {
+  url: http://localhost:8080/evaluations/{{evaluationId}}
+  body: none
+  auth: none
+}

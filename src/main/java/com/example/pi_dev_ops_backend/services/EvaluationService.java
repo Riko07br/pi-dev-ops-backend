@@ -6,7 +6,7 @@ import com.example.pi_dev_ops_backend.domain.entities.ContractedListing;
 import com.example.pi_dev_ops_backend.domain.entities.Evaluation;
 import com.example.pi_dev_ops_backend.domain.entities.UserProfile;
 import com.example.pi_dev_ops_backend.domain.mappers.EvaluationMapper;
-import com.example.pi_dev_ops_backend.domain.queryParams.PaginationParams;
+import com.example.pi_dev_ops_backend.domain.queryParams.EvaluationPaginationParams;
 import com.example.pi_dev_ops_backend.repository.EvaluationRepository;
 import com.example.pi_dev_ops_backend.services.exceptions.InvalidArgsException;
 import com.example.pi_dev_ops_backend.services.exceptions.ResourceNotFoundException;
@@ -28,7 +28,7 @@ public class EvaluationService
     private final ContractedListingService contractedListingService;
     private final UserProfileService userProfileService;
 
-    public Page<EvaluationResponseDTO> findAll(PaginationParams paginationParams)
+    public Page<EvaluationResponseDTO> findAll(EvaluationPaginationParams paginationParams)
     {
         Pageable pageable = paginationParams.getPageable();
         //        Specification<Evaluation> specification = EvaluationSpecification.filter(paginationParams);
@@ -72,6 +72,8 @@ public class EvaluationService
     public void delete(Long id)
     {
         Evaluation evaluation = findEntityById(id);
+        evaluation.getContractedListing().setEvaluation(null);
+        evaluation.setContractedListing(null);
         evaluationRepository.delete(evaluation);
     }
 

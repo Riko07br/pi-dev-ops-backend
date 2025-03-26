@@ -9,7 +9,8 @@ public record ContractedListingResponseDTO(
         Instant startedAt,
         Instant finishedAt,
         Long listingId,
-        Long clientId
+        Long clientId,
+        Integer evaluationId
 )
 {
 }
