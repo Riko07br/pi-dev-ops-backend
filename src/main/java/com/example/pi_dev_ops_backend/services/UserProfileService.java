@@ -18,6 +18,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 @RequiredArgsConstructor
 public class UserProfileService
@@ -50,18 +52,7 @@ public class UserProfileService
         UserProfile createdUserProfile = UserProfileMapper.INSTANCE.toUserProfile(userProfileRequestDTO);
         createdUserProfile.setUser(user);
         user.setUserProfile(createdUserProfile);
-
-        userProfileRequestDTO.skills().forEach(skillName -> {
-            try
-            {
-                Skill skill = skillService.findEntityByName(skillName);
-                createdUserProfile.addSkill(skill);
-            }
-            catch (ResourceNotFoundException e)
-            {
-                createdUserProfile.addSkill(new Skill(skillName));
-            }
-        });
+        addSkillsToUserProfile(createdUserProfile, userProfileRequestDTO.skills());
 
         UserProfile userProfile = userProfileRepository.save(createdUserProfile);
         return UserProfileMapper.INSTANCE.toUserProfileResponseDTO(userProfile);
@@ -72,18 +63,7 @@ public class UserProfileService
         findEntityById(id);
         UserProfile updatedUserProfile = UserProfileMapper.INSTANCE.toUserProfile(userProfileRequestDTO);
         updatedUserProfile.setId(id);
-
-        userProfileRequestDTO.skills().forEach(skillName -> {
-            try
-            {
-                Skill skill = skillService.findEntityByName(skillName);
-                updatedUserProfile.addSkill(skill);
-            }
-            catch (ResourceNotFoundException e)
-            {
-                updatedUserProfile.addSkill(new Skill(skillName));
-            }
-        });
+        addSkillsToUserProfile(updatedUserProfile, userProfileRequestDTO.skills());
 
         UserProfile userProfile = userProfileRepository.save(updatedUserProfile);
         return UserProfileMapper.INSTANCE.toUserProfileResponseDTO(userProfile);
@@ -93,6 +73,7 @@ public class UserProfileService
     {
         UserProfile userProfile = findEntityById(id);
         userProfile.getUser().setUserProfile(null);
+        userProfile.getSkills().clear();
         userProfileRepository.delete(userProfile);
     }
 
@@ -106,5 +87,20 @@ public class UserProfileService
     {
         return userProfileRepository.findByUserEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(UserProfile.class, email));
+    }
+
+    private void addSkillsToUserProfile(UserProfile userProfile, Collection<String> skillNames)
+    {
+        skillNames.forEach(skillName -> {
+            try
+            {
+                Skill skill = skillService.findEntityByName(skillName);
+                userProfile.addSkill(skill);
+            }
+            catch (ResourceNotFoundException e)
+            {
+                userProfile.addSkill(skillService.saveEntity(new Skill(skillName)));
+            }
+        });
     }
 }

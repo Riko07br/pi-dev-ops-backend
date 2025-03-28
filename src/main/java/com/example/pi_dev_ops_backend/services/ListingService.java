@@ -3,6 +3,7 @@ package com.example.pi_dev_ops_backend.services;
 import com.example.pi_dev_ops_backend.domain.dtos.ListingRequestDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.ListingResponseDTO;
 import com.example.pi_dev_ops_backend.domain.entities.Listing;
+import com.example.pi_dev_ops_backend.domain.entities.Skill;
 import com.example.pi_dev_ops_backend.domain.entities.User;
 import com.example.pi_dev_ops_backend.domain.mappers.ListingMapper;
 import com.example.pi_dev_ops_backend.domain.queryParams.ListingPaginationParams;
@@ -18,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class ListingService
 {
     private final ListingRepository listingRepository;
     private final UserService userService;
+    private final SkillService skillService;
 
     public Page<ListingResponseDTO> findAll(ListingPaginationParams paginationParams)
     {
@@ -52,9 +55,10 @@ public class ListingService
         Listing listing = ListingMapper.INSTANCE.toListing(listingRequestDTO);
         listing.setCreationDate(LocalDate.now());
         listing.setUserProfile(user.getUserProfile());
-        listing = listingRepository.save(listing);
 
-        return ListingMapper.INSTANCE.toListingResponseDTO(listing);
+        addSkillsToListing(listing, listingRequestDTO.skills());
+
+        return ListingMapper.INSTANCE.toListingResponseDTO(listingRepository.save(listing));
     }
 
     public ListingResponseDTO update(Long id, ListingRequestDTO listingRequestDTO)
@@ -66,12 +70,15 @@ public class ListingService
         listing.setPrice(listingRequestDTO.price());
         listing.setLocation(listingRequestDTO.location());
 
+        addSkillsToListing(listing, listingRequestDTO.skills());
+
         return ListingMapper.INSTANCE.toListingResponseDTO(listingRepository.save(listing));
     }
 
     public void delete(Long id)
     {
         Listing listing = findEntityById(id);
+        listing.getSkills().clear();
         listingRepository.delete(listing);
     }
 
@@ -79,6 +86,21 @@ public class ListingService
     {
         return listingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(Listing.class, id));
+    }
+
+    private void addSkillsToListing(Listing listing, Collection<String> skillNames)
+    {
+        skillNames.forEach(skillName -> {
+            try
+            {
+                Skill skill = skillService.findEntityByName(skillName);
+                listing.addSkill(skill);
+            }
+            catch (ResourceNotFoundException e)
+            {
+                listing.addSkill(skillService.saveEntity(new Skill(skillName)));
+            }
+        });
     }
 
 }

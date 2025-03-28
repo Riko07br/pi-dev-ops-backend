@@ -1,12 +1,15 @@
 package com.example.pi_dev_ops_backend.domain.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,8 +18,10 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -38,9 +43,12 @@ public class Listing implements Serializable
 
     @ManyToOne
     private UserProfile userProfile;
-
     @OneToMany (mappedBy = "listing")
+    @Setter(AccessLevel.NONE)
     private List<ContractedListing> contractedListings = new ArrayList<>();
+    @ManyToMany (cascade = CascadeType.REMOVE)
+    @Setter(AccessLevel.NONE)
+    private Set<Skill> skills = new HashSet<>();
 
     public Listing(
             String title,
@@ -72,5 +80,10 @@ public class Listing implements Serializable
     public int hashCode()
     {
         return Objects.hashCode(id);
+    }
+
+    public void addSkill(Skill skill)
+    {
+        this.skills.add(skill);
     }
 }

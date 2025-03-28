@@ -47,7 +47,7 @@ public class UserProfile implements Serializable
     @OneToOne
     private User user;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @Setter(AccessLevel.NONE)
     private Set<Skill> skills = new HashSet<>();
 
