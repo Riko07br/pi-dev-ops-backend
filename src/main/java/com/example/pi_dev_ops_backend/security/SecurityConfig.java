@@ -22,23 +22,24 @@ public class SecurityConfig
 {
     @Autowired
     UserRepository userRepository;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
     {
         http.csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(config ->
+                        config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JWTValidatorFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JWTRefreshFilter(userRepository), BasicAuthenticationFilter.class)
                 .addFilterAfter(new JWTGeneratorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/auth/register",
-                                "/h2-console/**")
-                        .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/listings/**").permitAll()
+                        .requestMatchers(EndpointConfig.PUBLIC_ANY_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, EndpointConfig.PUBLIC_GET_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.POST, EndpointConfig.PUBLIC_POST_ENDPOINTS).permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
-                .headers(headerConfig -> headerConfig.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+                .headers(headerConfig ->
+                        headerConfig.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
         return http.build();
     }

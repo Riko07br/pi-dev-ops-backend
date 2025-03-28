@@ -1,0 +1,18 @@
+meta {
+  name: Evaluation-update
+  type: http
+  seq: 2
+}
+
+put {
+  url: http://localhost:8080/evaluations/{{evaluationId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "comment": "Best service",
+    "stars": 5
+  }
+}

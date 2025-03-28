@@ -14,6 +14,7 @@ public interface ContractedListingMapper
 
     @Mapping (source = "listing.id", target = "listingId")
     @Mapping (source = "client.id", target = "clientId")
+    @Mapping (source = "evaluation.id", target = "evaluationId")
     ContractedListingResponseDTO toContractedListingResponseDTO(ContractedListing contractedListing);
     ContractedListing toContractedListing(ContractedListingRequestDTO contractedListingRequestDTO);
 }

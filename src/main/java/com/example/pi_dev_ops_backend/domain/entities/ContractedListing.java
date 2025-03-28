@@ -1,5 +1,6 @@
 package com.example.pi_dev_ops_backend.domain.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,7 +15,6 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.List;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -38,7 +38,7 @@ public class ContractedListing implements Serializable
     private UserProfile client;
     @ManyToOne
     private Listing listing;
-    @OneToOne(mappedBy = "contractedListing")
+    @OneToOne(mappedBy = "contractedListing", cascade = CascadeType.REMOVE)
     private Evaluation evaluation;
 
     public ContractedListing(
