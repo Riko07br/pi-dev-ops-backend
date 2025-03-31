@@ -36,16 +36,22 @@ public class ContractedListingService
         Specification<ContractedListing> specification = ContractedListingSpecification.filter(paginationParams);
         return contractedListingRepository
                 .findAll(specification, pageable)
-                .map(ContractedListingMapper.INSTANCE::toContractedListingResponseDTO);
+                .map(contractedListing ->
+                        ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(contractedListing, paginationParams)
+                );
     }
 
     public ContractedListingResponseDTO findById(Long id)
     {
         ContractedListing contractedListing = findEntityById(id);
-        return ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(contractedListing);
+
+        return ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(contractedListing, new ContractedListingPaginationParams());
     }
 
-    public ContractedListingResponseDTO create(ContractedListingRequestDTO contractedListingRequestDTO, Authentication authentication)
+    public ContractedListingResponseDTO create(
+            ContractedListingRequestDTO contractedListingRequestDTO,
+            Authentication authentication
+    )
     {
         User user = userService.findEntityByEmail(authentication.getName());
         if (user.getUserProfile() == null)
@@ -62,7 +68,7 @@ public class ContractedListingService
         contractedListing.setClient(client);
 
         contractedListing = contractedListingRepository.save(contractedListing);
-        return ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(contractedListing);
+        return ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(contractedListing, new ContractedListingPaginationParams());
     }
 
     public ContractedListingResponseDTO update(Long id, ContractedListingRequestDTO contractedListingRequestDTO)
@@ -73,7 +79,7 @@ public class ContractedListingService
         contractedListing.setFinishedAt(contractedListingRequestDTO.finishedAt() == null ? contractedListing.getFinishedAt() : contractedListingRequestDTO.finishedAt());
 
         ContractedListing updatedContractedListing = contractedListingRepository.save(contractedListing);
-        return ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(updatedContractedListing);
+        return ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(updatedContractedListing, new ContractedListingPaginationParams());
     }
 
     public void delete(Long id)
@@ -101,7 +107,7 @@ public class ContractedListingService
         }
 
         ContractedListing updatedContractedListing = contractedListingRepository.save(contractedListing);
-        return ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(updatedContractedListing);
+        return ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(updatedContractedListing, new ContractedListingPaginationParams());
     }
 
     ContractedListing findEntityById(Long id)

@@ -8,9 +8,9 @@ public record ContractedListingResponseDTO(
         String clientRequest,
         Instant startedAt,
         Instant finishedAt,
-        Long listingId,
-        Long clientId,
-        Integer evaluationId
+        ListingResponseDTO listing,
+        UserProfileResponseDTO client,
+        EvaluationResponseDTO evaluation
 )
 {
 }
