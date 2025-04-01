@@ -23,7 +23,7 @@ public class UserProfileSpecification
         return (root, query, builder) ->
                 name == null ?
                         builder.conjunction() :
-                        builder.like(builder.lower(root.get("name")), "%" + name + "%");
+                        builder.like(builder.lower(root.get("name")), "%" + name.toLowerCase() + "%");
     }
 
     private static Specification<UserProfile> findByAddress(String address)
@@ -31,7 +31,7 @@ public class UserProfileSpecification
         return (root, query, builder) ->
                 address == null ?
                         builder.conjunction() :
-                        builder.like(builder.lower(root.get("address")), "%" + address + "%");
+                        builder.like(builder.lower(root.get("address")), "%" + address.toLowerCase() + "%");
     }
 
     private static Specification<UserProfile> findByTitle(String title)

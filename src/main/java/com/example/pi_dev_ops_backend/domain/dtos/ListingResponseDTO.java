@@ -1,6 +1,7 @@
 package com.example.pi_dev_ops_backend.domain.dtos;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record ListingResponseDTO(
         Long id,
@@ -9,7 +10,9 @@ public record ListingResponseDTO(
         String description,
         String location,
         LocalDate creationDate,
-        ListingUserProfileResponseDTO userProfile
+        ListingUserProfileResponseDTO userProfile,
+        List<String> skills,
+        List<ContractedListingResponseDTO> contractedListings
 )
 {
 }

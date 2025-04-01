@@ -73,4 +73,9 @@ public class SkillService
                 .orElseThrow(() -> new ResourceNotFoundException(Skill.class, id));
     }
 
+    public Skill saveEntity(Skill skill)
+    {
+        return skillRepository.save(skill);
+    }
+
 }

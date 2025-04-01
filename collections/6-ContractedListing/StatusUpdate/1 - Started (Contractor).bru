@@ -1,0 +1,22 @@
+meta {
+  name: 1 - Started (Contractor)
+  type: http
+  seq: 1
+}
+
+put {
+  url: http://localhost:8080/contracted-listings/{{contractedListingId}}/status
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "status": "STARTED"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("contractedListingId", res.body.id)
+  
+}

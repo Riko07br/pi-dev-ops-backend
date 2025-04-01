@@ -1,0 +1,23 @@
+meta {
+  name: CListing-update
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost:8080/contracted-listings/{{contractedListingId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "startedAt": "2025-03-24",
+    "finishedAt": "2025-08-29"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("contractedListingId", res.body.id)
+  
+}
