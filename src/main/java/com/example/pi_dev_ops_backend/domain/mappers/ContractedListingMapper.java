@@ -7,6 +7,7 @@ import com.example.pi_dev_ops_backend.domain.dtos.ListingResponseDTO;
 import com.example.pi_dev_ops_backend.domain.dtos.UserProfileResponseDTO;
 import com.example.pi_dev_ops_backend.domain.entities.ContractedListing;
 import com.example.pi_dev_ops_backend.domain.queryParams.ContractedListingPaginationParams;
+import com.example.pi_dev_ops_backend.domain.queryParams.ListingPaginationParams;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -23,7 +24,7 @@ public interface ContractedListingMapper
     )
     {
         ListingResponseDTO listingResponseDTO = paginationParams.getIncludeListing()
-                ? ListingMapper.INSTANCE.toListingResponseDTO(contractedListing.getListing())
+                ? ListingMapper.INSTANCE.toListingResponseDTO(contractedListing.getListing(), new ListingPaginationParams(false))
                 : null;
         UserProfileResponseDTO userProfileResponseDTO = paginationParams.getIncludeClient()
                 ? UserProfileMapper.INSTANCE.toUserProfileResponseDTO(contractedListing.getClient())

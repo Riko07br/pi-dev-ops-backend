@@ -21,4 +21,11 @@ public class ContractedListingPaginationParams extends PaginationParams
     private Boolean includeListing = true;
     private Boolean includeClient = true;
     private Boolean includeEvaluation = true;
+
+    public ContractedListingPaginationParams(boolean includeAll)
+    {
+        this.includeListing = includeAll;
+        this.includeClient = includeAll;
+        this.includeEvaluation = includeAll;
+    }
 }

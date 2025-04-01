@@ -35,13 +35,13 @@ public class ListingService
         Specification<Listing> specification = ListingSpecification.filter(paginationParams);
         return listingRepository
                 .findAll(specification, pageable)
-                .map(ListingMapper.INSTANCE::toListingResponseDTO);
+                .map(listing ->ListingMapper.INSTANCE.toListingResponseDTO(listing, paginationParams));
     }
 
     public ListingResponseDTO findById(Long id)
     {
         Listing listing = findEntityById(id);
-        return ListingMapper.INSTANCE.toListingResponseDTO(listing);
+        return ListingMapper.INSTANCE.toListingResponseDTO(listing, new ListingPaginationParams());
     }
 
     public ListingResponseDTO create(ListingRequestDTO listingRequestDTO, Authentication authentication)
@@ -58,7 +58,7 @@ public class ListingService
 
         addSkillsToListing(listing, listingRequestDTO.skills());
 
-        return ListingMapper.INSTANCE.toListingResponseDTO(listingRepository.save(listing));
+        return ListingMapper.INSTANCE.toListingResponseDTO(listingRepository.save(listing), new ListingPaginationParams());
     }
 
     public ListingResponseDTO update(Long id, ListingRequestDTO listingRequestDTO)
@@ -72,7 +72,7 @@ public class ListingService
 
         addSkillsToListing(listing, listingRequestDTO.skills());
 
-        return ListingMapper.INSTANCE.toListingResponseDTO(listingRepository.save(listing));
+        return ListingMapper.INSTANCE.toListingResponseDTO(listingRepository.save(listing), new ListingPaginationParams());
     }
 
     public void delete(Long id)

@@ -11,7 +11,8 @@ public record ListingResponseDTO(
         String location,
         LocalDate creationDate,
         ListingUserProfileResponseDTO userProfile,
-        List<String> skills
+        List<String> skills,
+        List<ContractedListingResponseDTO> contractedListings
 )
 {
 }
