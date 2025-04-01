@@ -4,7 +4,7 @@ import com.example.pi_dev_ops_backend.domain.entities.ContractedListing;
 import com.example.pi_dev_ops_backend.domain.queryParams.ContractedListingPaginationParams;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 public class ContractedListingSpecification
 {
@@ -42,8 +42,8 @@ public class ContractedListingSpecification
 
     private static Specification<ContractedListing> findByStartDate(String minStartDate, String maxStartDate)
     {
-        Instant parsedMinStartDate = parseStringToInstant(minStartDate, true);
-        Instant parsedMaxStartDate = parseStringToInstant(maxStartDate, true);
+        LocalDate parsedMinStartDate = parseStringToDate(minStartDate, true);
+        LocalDate parsedMaxStartDate = parseStringToDate(maxStartDate, true);
 
         return (root, query, builder) -> {
             if (parsedMinStartDate == null && parsedMaxStartDate == null)
@@ -58,8 +58,8 @@ public class ContractedListingSpecification
 
     private static Specification<ContractedListing> findByFinishDate(String minFinishedDate, String maxFinishedDate)
     {
-        Instant parsedMinFinishedDate = parseStringToInstant(minFinishedDate, false);
-        Instant parsedMaxFinishedDate = parseStringToInstant(maxFinishedDate, false);
+        LocalDate parsedMinFinishedDate = parseStringToDate(minFinishedDate, false);
+        LocalDate parsedMaxFinishedDate = parseStringToDate(maxFinishedDate, false);
 
         return (root, query, builder) -> {
             if (parsedMinFinishedDate == null && parsedMaxFinishedDate == null)
@@ -90,11 +90,11 @@ public class ContractedListingSpecification
         };
     }
 
-    private static Instant parseStringToInstant(String date, boolean atDayStart)
+    private static LocalDate parseStringToDate(String date, boolean atDayStart)
     {
         return date == null ? null : (atDayStart ?
-                Instant.parse(date + "T00:00:00Z") :
-                Instant.parse(date + "T23:59:59Z"));
+                LocalDate.parse(date) :
+                LocalDate.parse(date).plusDays(1));
     }
 
 }

@@ -14,7 +14,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -31,8 +31,8 @@ public class ContractedListing implements Serializable
     private Long id;
     private String status;
     private String clientRequest;
-    private Instant startedAt;
-    private Instant finishedAt;
+    private LocalDate startedAt;
+    private LocalDate finishedAt;
 
     @ManyToOne
     private UserProfile client;
@@ -44,8 +44,8 @@ public class ContractedListing implements Serializable
     public ContractedListing(
             String status,
             String clientRequest,
-            Instant startedAt,
-            Instant finishedAt,
+            LocalDate startedAt,
+            LocalDate finishedAt,
             Listing listing,
             UserProfile client
     )

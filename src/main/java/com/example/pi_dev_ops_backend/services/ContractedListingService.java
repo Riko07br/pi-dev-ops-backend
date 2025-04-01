@@ -105,7 +105,7 @@ public class ContractedListingService
         {
             throw new InvalidArgsException("Invalid status transition");
         }
-
+        contractedListing.setStatus(newStatus);
         ContractedListing updatedContractedListing = contractedListingRepository.save(contractedListing);
         return ContractedListingMapper.INSTANCE.toContractedListingResponseDTO(updatedContractedListing, new ContractedListingPaginationParams());
     }

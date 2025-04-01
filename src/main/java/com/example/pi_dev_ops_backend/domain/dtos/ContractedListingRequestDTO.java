@@ -1,11 +1,11 @@
 package com.example.pi_dev_ops_backend.domain.dtos;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 public record ContractedListingRequestDTO(
         String clientRequest,
-        Instant startedAt,
-        Instant finishedAt,
+        LocalDate startedAt,
+        LocalDate finishedAt,
         Long listingId
 )
 {

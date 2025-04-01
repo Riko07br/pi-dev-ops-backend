@@ -69,8 +69,8 @@ public class DevConfig implements CommandLineRunner
             ContractedListing cl = new ContractedListing(
                     finished ? "ACCEPTED" : "CONTRACTED",
                     "Request " + i,
-                    getInstant(10 * (i - 5), true),
-                    getInstant(10 * (i - 5), false),
+                    localDate(10 * (i - 5), true),
+                    localDate(10 * (i - 5), false),
                     listingList.get(i - 6),
                     userProfileList.get(i));
             contractedListingRepository.save(cl);
@@ -109,15 +109,23 @@ public class DevConfig implements CommandLineRunner
 
         ContractedListing cl1 = new ContractedListing("CONTRACTED", "Request 1", null, null, l1, userProfileList.get(0));
         contractedListingRepository.save(cl1);
-        ContractedListing cl2 = new ContractedListing("CANCELLED", "Request 2", getInstant(1, true), null, l2, userProfileList.get(1));
+        ContractedListing cl2 = new ContractedListing("CANCELLED", "Request 2", localDate(1, true), null, l2, userProfileList.get(1));
         cl2 = contractedListingRepository.save(cl2);
-        ContractedListing cl3 = new ContractedListing("ACCEPTED", "Request 3", getInstant(2, true), Instant.now(), l1, userProfileList.get(2));
+        ContractedListing cl3 = new ContractedListing("ACCEPTED", "Request 3", localDate(2, true), LocalDate.now(), l1, userProfileList.get(2));
         cl3 = contractedListingRepository.save(cl3);
 
         Evaluation e1 = new Evaluation("Good job", 5, Instant.now(), cl2);
         evaluationRepository.save(e1);
         Evaluation e2 = new Evaluation("Bad job", 1, Instant.now(), cl3);
         evaluationRepository.save(e2);
+    }
+
+    private LocalDate localDate(long days, boolean isMinus)
+    {
+        LocalDate now = LocalDate.now();
+        return !isMinus
+                ? now.plusDays(days)
+                : now.minusDays(days);
     }
 
     private Instant getInstant(long days, boolean isMinus)

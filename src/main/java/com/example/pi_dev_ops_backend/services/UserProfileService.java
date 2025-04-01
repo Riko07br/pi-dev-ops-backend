@@ -60,12 +60,18 @@ public class UserProfileService
 
     public UserProfileResponseDTO update(Long id, UserProfileRequestDTO userProfileRequestDTO)
     {
-        findEntityById(id);
-        UserProfile updatedUserProfile = UserProfileMapper.INSTANCE.toUserProfile(userProfileRequestDTO);
-        updatedUserProfile.setId(id);
-        addSkillsToUserProfile(updatedUserProfile, userProfileRequestDTO.skills());
+        UserProfile userProfile = findEntityById(id);
+        userProfile.setName(userProfileRequestDTO.name() != null ? userProfileRequestDTO.name() : userProfile.getName());
+        userProfile.setPhone(userProfileRequestDTO.phone() != null ? userProfileRequestDTO.phone() : userProfile.getPhone());
+        userProfile.setAddress(userProfileRequestDTO.address() != null ? userProfileRequestDTO.address() : userProfile.getAddress());
+        userProfile.setPostalCode(userProfileRequestDTO.postalCode() != null ? userProfileRequestDTO.postalCode() : userProfile.getPostalCode());
+        userProfile.setDocument(userProfileRequestDTO.document() != null ? userProfileRequestDTO.document() : userProfile.getDocument());
+        userProfile.setDescription(userProfileRequestDTO.description() != null ? userProfileRequestDTO.description() : userProfile.getDescription());
+        userProfile.setTitle(userProfileRequestDTO.title() != null ? userProfileRequestDTO.title() : userProfile.getTitle());
+        userProfile.getSkills().clear();
+        addSkillsToUserProfile(userProfile, userProfileRequestDTO.skills());
 
-        UserProfile userProfile = userProfileRepository.save(updatedUserProfile);
+        userProfile = userProfileRepository.save(userProfile);
         return UserProfileMapper.INSTANCE.toUserProfileResponseDTO(userProfile);
     }
 

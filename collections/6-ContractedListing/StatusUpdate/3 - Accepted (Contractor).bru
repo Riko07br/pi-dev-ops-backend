@@ -1,0 +1,22 @@
+meta {
+  name: 3 - Accepted (Contractor)
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost:8080/contracted-listings/{{contractedListingId}}/status
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "status": "ACCEPTED"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("contractedListingId", res.body.id)
+  
+}
