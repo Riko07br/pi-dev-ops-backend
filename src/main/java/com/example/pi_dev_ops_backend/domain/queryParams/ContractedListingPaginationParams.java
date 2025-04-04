@@ -17,6 +17,7 @@ public class ContractedListingPaginationParams extends PaginationParams
     private String maxFinishedDate;
     private Long listingId;
     private Long clientId;
+    private Long profileId;
 
     private Boolean includeListing = true;
     private Boolean includeClient = true;

@@ -22,6 +22,7 @@ public class ContractedListingSpecification
                                 contractedListingPaginationParams.getMinFinishedDate(),
                                 contractedListingPaginationParams.getMaxFinishedDate()).toPredicate(root, query, builder),
                         findByClientId(contractedListingPaginationParams.getClientId()).toPredicate(root, query, builder),
+                        findByProfileId(contractedListingPaginationParams.getProfileId()).toPredicate(root, query, builder),
                         findByListingId(contractedListingPaginationParams.getListingId()).toPredicate(root, query, builder)
                 );
     }
@@ -78,6 +79,15 @@ public class ContractedListingSpecification
             if (clientId == null)
                 return builder.conjunction();
             return builder.equal(root.get("client").get("id"), clientId);
+        };
+    }
+
+    private static Specification<ContractedListing> findByProfileId(Long profileId)
+    {
+        return (root, query, builder) -> {
+            if (profileId == null)
+                return builder.conjunction();
+            return builder.equal(root.get("listing").get("userProfile").get("id"), profileId);
         };
     }
 

@@ -19,7 +19,12 @@ import java.nio.charset.StandardCharsets;
 
 public class JWTValidatorFilter extends OncePerRequestFilter
 {
-    static final String JWT_SECRET_KEY = "aw0&apom.w5@7&r-+ty6682/-nhQEfyjyilk89tyK+-Igs1[[hdfw223423fRr";
+    private final String jwtSecretKey;
+
+    public JWTValidatorFilter(String jwtSecretKey)
+    {
+        this.jwtSecretKey = jwtSecretKey;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException
@@ -29,7 +34,7 @@ public class JWTValidatorFilter extends OncePerRequestFilter
         {
             try
             {
-                Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+                Algorithm algorithm = Algorithm.HMAC256(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
                 JWTVerifier verifier = JWT.require(algorithm)
                         .withIssuer("SeriousBizness")
                         .withSubject("User Info")
