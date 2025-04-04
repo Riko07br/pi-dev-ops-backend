@@ -21,12 +21,13 @@ import java.time.temporal.ChronoUnit;
 
 public class JWTRefreshFilter extends OncePerRequestFilter
 {
-    static final String JWT_SECRET_KEY = "aw0&apom.w5@7&r-+ty6682/-nhQEfyjyilk89tyK+-Igs1[[hdfw223423fRr";
+    private final String jwtSecretKey;
     private final UserRepository userRepository;
 
-    public JWTRefreshFilter(UserRepository userRepository)
+    public JWTRefreshFilter(String jwtSecretKey, UserRepository userRepository)
     {
         this.userRepository = userRepository;
+        this.jwtSecretKey = jwtSecretKey;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class JWTRefreshFilter extends OncePerRequestFilter
         {
             try
             {
-                Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+                Algorithm algorithm = Algorithm.HMAC256(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
                 String email = authentication.getName();
 
                 User user = userRepository
