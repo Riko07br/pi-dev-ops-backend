@@ -139,9 +139,10 @@ public class DevConfig implements CommandLineRunner
     private List<UserProfile> generateUserProfiles(int amount, List<Skill> skillList)
     {
         List<UserProfile> userProfiles = new ArrayList<>();
+        String password = securityConfiguration.passwordEncoder().encode("123456");
         for (int i = 0; i < amount; i++)
         {
-            User u = userRepository.save(new User("user" + i + "@mail.com", "123456"));
+            User u = userRepository.save(new User("user" + i + "@mail.com", password));
             UserProfile p = new UserProfile(
                     "User " + i,
                     "123456789-" + i,
