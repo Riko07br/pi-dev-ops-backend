@@ -50,7 +50,8 @@ public class UserProfileServiceTest
     private UserProfileService userProfileService;
 
     @Test
-    public void findAll_ReturnsPagedUserProfiles() {
+    public void findAll_ReturnsPagedUserProfiles()
+    {
         UserProfilePaginationParams paginationParams = new UserProfilePaginationParams();
         Page<UserProfile> userProfiles = new PageImpl<>(List.of(new UserProfile()));
 
@@ -64,7 +65,8 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void findById_ReturnsUserProfile() {
+    public void findById_ReturnsUserProfile()
+    {
         Long id = 1L;
         UserProfile userProfile = new UserProfile();
         userProfile.setId(id);
@@ -79,7 +81,8 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void findById_NotFound_ThrowsResourceNotFoundException() {
+    public void findById_NotFound_ThrowsResourceNotFoundException()
+    {
         Long id = 1L;
 
         when(userProfileRepository.findById(id)).thenReturn(Optional.empty());
@@ -89,7 +92,8 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void create_UserAlreadyHasProfile_ThrowsInvalidArgsException() {
+    public void create_UserAlreadyHasProfile_ThrowsInvalidArgsException()
+    {
         UserProfileRequestDTO userProfileRequestDTO = mockUserProfileRequestDTO();
         Authentication authentication = mock(Authentication.class);
         User user = new User();
@@ -103,7 +107,8 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void create_Success() {
+    public void create_Success()
+    {
         UserProfileRequestDTO userProfileRequestDTO = mockUserProfileRequestDTO();
         Authentication authentication = mock(Authentication.class);
         User user = new User();
@@ -116,7 +121,6 @@ public class UserProfileServiceTest
         when(skillService.findEntityByName(any(String.class)))
                 .thenAnswer(invocation -> new Skill(invocation.getArgument(0)));
 
-
         UserProfileResponseDTO result = userProfileService.create(userProfileRequestDTO, authentication);
 
         assertNotNull(result);
@@ -124,7 +128,8 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void update_Success() {
+    public void update_Success()
+    {
         Long id = 1L;
         UserProfileRequestDTO userProfileRequestDTO = mockUserProfileRequestDTO();
         UserProfile userProfile = new UserProfile();
@@ -143,7 +148,8 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void update_NotFound_ThrowsResourceNotFoundException() {
+    public void update_NotFound_ThrowsResourceNotFoundException()
+    {
         Long id = 1L;
         UserProfileRequestDTO userProfileRequestDTO = mockUserProfileRequestDTO();
 
@@ -154,7 +160,8 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void delete_Success() {
+    public void delete_Success()
+    {
         Long id = 1L;
         UserProfile userProfile = new UserProfile();
         userProfile.setId(id);
@@ -172,7 +179,8 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void delete_NotFound_ThrowsResourceNotFoundException() {
+    public void delete_NotFound_ThrowsResourceNotFoundException()
+    {
         Long id = 1L;
 
         when(userProfileRepository.findById(id)).thenReturn(Optional.empty());
@@ -181,7 +189,8 @@ public class UserProfileServiceTest
         verify(userProfileRepository, never()).delete(any(UserProfile.class));
     }
 
-    private UserProfileRequestDTO mockUserProfileRequestDTO() {
+    private UserProfileRequestDTO mockUserProfileRequestDTO()
+    {
         return new UserProfileRequestDTO(
                 "User Name",
                 "123456789",
@@ -193,6 +202,5 @@ public class UserProfileServiceTest
                 "Title"
         );
     }
-
 
 }

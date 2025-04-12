@@ -26,7 +26,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith (MockitoExtension.class)
-public class UserServiceTest {
+public class UserServiceTest
+{
 
     @Mock
     private UserRepository userRepository;
@@ -37,7 +38,8 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    public void createUser_EmailAlreadyInUse_ThrowsInvalidArgsException() {
+    public void createUser_EmailAlreadyInUse_ThrowsInvalidArgsException()
+    {
         UserRequestDTO userRequestDTO = new UserRequestDTO("email@example.com", "password");
 
         when(userRepository.findByEmail(userRequestDTO.email())).thenReturn(Optional.of(new User()));
@@ -47,7 +49,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void updateUser_Success() {
+    public void updateUser_Success()
+    {
         Long userId = 1L;
         UserRequestDTO userRequestDTO = new UserRequestDTO("newemail@example.com", "newpassword");
         User user = new User("oldemail@example.com", "oldpassword");
@@ -66,7 +69,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void updateUser_EmailAlreadyInUse_ThrowsInvalidArgsException() {
+    public void updateUser_EmailAlreadyInUse_ThrowsInvalidArgsException()
+    {
         Long userId = 1L;
         UserRequestDTO userRequestDTO = new UserRequestDTO("email@example.com", "newpassword");
         User user = new User("oldemail@example.com", "oldpassword");
@@ -81,7 +85,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void deleteUser_Success() {
+    public void deleteUser_Success()
+    {
         Long userId = 1L;
 
         doNothing().when(userRepository).deleteById(userId);
@@ -92,7 +97,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void findByEmail_Success() {
+    public void findByEmail_Success()
+    {
         String email = "email@example.com";
         User user = new User(email, "password");
 
@@ -106,7 +112,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void findByEmail_NotFound_ThrowsResourceNotFoundException() {
+    public void findByEmail_NotFound_ThrowsResourceNotFoundException()
+    {
         String email = "email@example.com";
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
@@ -114,6 +121,5 @@ public class UserServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> userService.findByEmail(email));
         verify(userRepository, times(1)).findByEmail(email);
     }
-
 
 }
