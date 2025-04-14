@@ -69,7 +69,7 @@ public class ListingService
         listing.setDescription(listingRequestDTO.description());
         listing.setPrice(listingRequestDTO.price());
         listing.setLocation(listingRequestDTO.location());
-
+        listing.getSkills().clear();
         addSkillsToListing(listing, listingRequestDTO.skills());
 
         return ListingMapper.INSTANCE.toListingResponseDTO(listingRepository.save(listing), new ListingPaginationParams());
