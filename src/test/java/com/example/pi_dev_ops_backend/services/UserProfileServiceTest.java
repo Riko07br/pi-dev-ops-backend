@@ -50,7 +50,7 @@ public class UserProfileServiceTest
     private UserProfileService userProfileService;
 
     @Test
-    public void findAll_ReturnsPagedUserProfiles()
+    public void givenPaginationParams_whenFindAll_thenReturnsPagedUserProfiles()
     {
         UserProfilePaginationParams paginationParams = new UserProfilePaginationParams();
         Page<UserProfile> userProfiles = new PageImpl<>(List.of(new UserProfile()));
@@ -65,7 +65,7 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void findById_ReturnsUserProfile()
+    public void givenUserId_whenFindById_thenReturnsUserProfile()
     {
         Long id = 1L;
         UserProfile userProfile = new UserProfile();
@@ -81,7 +81,7 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void findById_NotFound_ThrowsResourceNotFoundException()
+    public void givenUserId_whenFindById_thenThrowsResourceNotFoundException()
     {
         Long id = 1L;
 
@@ -92,7 +92,7 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void create_UserAlreadyHasProfile_ThrowsInvalidArgsException()
+    public void givenUserWithProfile_whenCreate_thenThrowsInvalidArgsException()
     {
         UserProfileRequestDTO userProfileRequestDTO = mockUserProfileRequestDTO();
         Authentication authentication = mock(Authentication.class);
@@ -107,7 +107,7 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void create_Success()
+    public void givenValidRequest_whenCreate_thenSuccess()
     {
         UserProfileRequestDTO userProfileRequestDTO = mockUserProfileRequestDTO();
         Authentication authentication = mock(Authentication.class);
@@ -128,7 +128,7 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void update_Success()
+    public void givenValidRequest_whenUpdate_thenSuccess()
     {
         Long id = 1L;
         UserProfileRequestDTO userProfileRequestDTO = mockUserProfileRequestDTO();
@@ -148,7 +148,7 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void update_NotFound_ThrowsResourceNotFoundException()
+    public void givenInvalidUserId_whenUpdate_thenThrowsResourceNotFoundException()
     {
         Long id = 1L;
         UserProfileRequestDTO userProfileRequestDTO = mockUserProfileRequestDTO();
@@ -160,7 +160,7 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void delete_Success()
+    public void givenValidUserId_whenDelete_thenSuccess()
     {
         Long id = 1L;
         UserProfile userProfile = new UserProfile();
@@ -179,7 +179,7 @@ public class UserProfileServiceTest
     }
 
     @Test
-    public void delete_NotFound_ThrowsResourceNotFoundException()
+    public void givenInvalidUserId_whenDelete_thenThrowsResourceNotFoundException()
     {
         Long id = 1L;
 
