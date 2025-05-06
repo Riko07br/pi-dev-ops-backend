@@ -44,6 +44,32 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          env:
+            - name: DB_HOST
+              value: {{ .Values.app.db.host | quote }}
+            - name: DB_PORT
+              value: {{ .Values.app.db.port | quote }}
+            - name: DB_NAME
+              value: {{ .Values.app.db.name | quote }}
+            - name: DB_SHOW_SQL
+              value: {{ .Values.app.db.showSql | quote }}
+            - name: DB_DLL_AUTO
+              value: {{ .Values.app.db.dllAuto | quote }}
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pi-dev-ops-backend.name" . }}-secret
+                  key: jwtSecret
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pi-dev-ops-backend.name" . }}-secret
+                  key: dbUser
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "pi-dev-ops-backend.name" . }}-secret
+                  key: dbPassword
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}

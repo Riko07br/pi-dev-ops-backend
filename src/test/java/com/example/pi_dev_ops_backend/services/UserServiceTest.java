@@ -38,7 +38,7 @@ public class UserServiceTest
     private UserService userService;
 
     @Test
-    public void createUser_EmailAlreadyInUse_ThrowsInvalidArgsException()
+    public void givenEmailAlreadyInUse_whenCreateUser_thenThrowsInvalidArgsException()
     {
         UserRequestDTO userRequestDTO = new UserRequestDTO("email@example.com", "password");
 
@@ -49,7 +49,7 @@ public class UserServiceTest
     }
 
     @Test
-    public void updateUser_Success()
+    public void givenValidUserIdAndRequest_whenUpdateUser_thenSuccess()
     {
         Long userId = 1L;
         UserRequestDTO userRequestDTO = new UserRequestDTO("newemail@example.com", "newpassword");
@@ -69,7 +69,7 @@ public class UserServiceTest
     }
 
     @Test
-    public void updateUser_EmailAlreadyInUse_ThrowsInvalidArgsException()
+    public void givenEmailAlreadyInUse_whenUpdateUser_thenThrowsInvalidArgsException()
     {
         Long userId = 1L;
         UserRequestDTO userRequestDTO = new UserRequestDTO("email@example.com", "newpassword");
@@ -85,7 +85,7 @@ public class UserServiceTest
     }
 
     @Test
-    public void deleteUser_Success()
+    public void givenValidUserId_whenDeleteUser_thenSuccess()
     {
         Long userId = 1L;
 
@@ -97,7 +97,7 @@ public class UserServiceTest
     }
 
     @Test
-    public void findByEmail_Success()
+    public void givenValidEmail_whenFindByEmail_thenSuccess()
     {
         String email = "email@example.com";
         User user = new User(email, "password");
@@ -112,7 +112,7 @@ public class UserServiceTest
     }
 
     @Test
-    public void findByEmail_NotFound_ThrowsResourceNotFoundException()
+    public void givenInvalidEmail_whenFindByEmail_thenThrowsResourceNotFoundException()
     {
         String email = "email@example.com";
 
